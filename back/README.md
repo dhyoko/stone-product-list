@@ -25,17 +25,19 @@ The API listens on port 3000. Set `PORT` to use another port.
 
 ## Scripts
 
-| Script | What it does |
-| --- | --- |
-| `npm run build` | Compiles `src/` to `dist/`. |
-| `npm run start:dev` | Starts the API and restarts it when a file changes. |
-| `npm run start:prod` | Starts the compiled API from `dist/`. |
-| `npm run typecheck` | Runs the TypeScript compiler without output. |
-| `npm run lint` | Runs ESLint and fixes what it can. |
-| `npm run format` | Formats `src/` and `test/` with Prettier. |
-| `npm test` | Runs the unit tests. |
-| `npm run test:cov` | Runs the unit tests with a coverage report. |
-| `npm run test:e2e` | Runs the end-to-end tests in `test/`. |
+| Script                 | What it does                                        |
+| ---------------------- | --------------------------------------------------- |
+| `npm run build`        | Compiles `src/` to `dist/`.                         |
+| `npm run start:dev`    | Starts the API and restarts it when a file changes. |
+| `npm run start:prod`   | Starts the compiled API from `dist/`.               |
+| `npm run typecheck`    | Runs the TypeScript compiler without output.        |
+| `npm run lint`         | Runs ESLint and reports problems.                   |
+| `npm run lint:fix`     | Runs ESLint and fixes what it can.                  |
+| `npm run format`       | Formats all files with Prettier.                    |
+| `npm run format:check` | Checks that all files match the Prettier format.    |
+| `npm test`             | Runs the unit tests.                                |
+| `npm run test:cov`     | Runs the unit tests with a coverage report.         |
+| `npm run test:e2e`     | Runs the end-to-end tests in `test/`.               |
 
 ## Code rules
 
