@@ -34,13 +34,21 @@ This is the back-end for the product listing challenge. It is a NestJS 11 API in
    npm run db:create-tables
    ```
 
-5. Start the API in watch mode:
+5. Create the demo user. The script skips a user that already exists:
+
+   ```bash
+   npm run db:seed
+   ```
+
+6. Start the API in watch mode:
 
    ```bash
    npm run start:dev
    ```
 
 To delete the local data, run `docker compose down -v`.
+
+The demo user logs in with the email `demo@example.com` and the `SEED_USER_PASSWORD` value from `.env`. The API has no sign-up route, so the seed script is the only way to create users.
 
 The API reads its settings from environment variables. `.env.example` lists each variable with its default. A variable set in the shell wins over the value in `.env`. The API does not start when a variable is invalid, and the error names each invalid variable.
 
