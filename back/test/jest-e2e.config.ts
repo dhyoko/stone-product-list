@@ -11,7 +11,6 @@ const config: Config = {
   },
   clearMocks: true,
   restoreMocks: true,
-  passWithNoTests: true,
 };
 
 export default config;

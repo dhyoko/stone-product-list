@@ -11,7 +11,7 @@ Before you write or change code in `src/` or `test/`, read `docs/styleguide.md`.
 A task is done when all of these commands pass in `back/`:
 
 ```bash
-npm run lint && npm run format:check && npm run typecheck && npm run test:cov && npm run build
+npm run lint && npm run format:check && npm run typecheck && npm run test:cov && npm run test:e2e && npm run build
 ```
 
 The git hooks run part of this list. Run the full list yourself before you report a task as done.
@@ -31,7 +31,7 @@ These choices are agreed with the user. Ask before you change one.
 
 - The git root is the parent folder. Husky is installed with `cd .. && husky back/.husky`, and each hook starts with `cd back`.
 - `tsconfig.build.json` includes only `src/`. A root-level `.ts` file in the build moves `main.js` to `dist/src/` and breaks `start:prod`.
-- `test/jest-e2e.config.ts` sets `passWithNoTests` because no e2e specs exist yet. Remove it when you add the first e2e spec.
+- The e2e specs build the app from `AppModule` and do not reach DynamoDB. Start DynamoDB Local before you add an e2e spec that reads or writes data.
 - Jest gives each test file its own copy of `process.env`. Code that writes env variables takes the target object as a parameter, as `loadEnvFile` does, so specs can pass a plain object.
 - Add each new env variable in three places: `src/config/env.schema.ts`, `AppConfig`, and `.env.example`.
 - Table key schemas live in `src/database/tables.ts`. Change a key there, and Terraform must match it.
