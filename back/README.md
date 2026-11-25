@@ -22,6 +22,8 @@ This is the back-end for the product listing challenge. It is a NestJS 11 API in
    cp .env.example .env
    ```
 
+   Set `JWT_SECRET` to at least 32 random characters. You can generate one with `openssl rand -base64 48`.
+
 3. Start DynamoDB Local. It keeps its data in a Docker volume, so the tables survive a restart:
 
    ```bash

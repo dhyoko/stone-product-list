@@ -4,6 +4,7 @@ import { Test } from '@nestjs/testing';
 import { mockClient } from 'aws-sdk-client-mock';
 import { ZodError } from 'zod';
 import { AppConfig } from '../config/app-config';
+import { buildTestConfig } from '../config/testing/test-config';
 import { type StoredUser, userIdSchema } from './user';
 import { UserAlreadyExistsError } from './user-already-exists.error';
 import { DynamoUsersRepository } from './dynamo-users.repository';
@@ -18,14 +19,7 @@ const user: StoredUser = {
 describe('DynamoUsersRepository', () => {
   const documentClient = DynamoDBDocumentClient.from(new DynamoDBClient({ region: 'us-east-1' }));
   const dynamoDb = mockClient(documentClient);
-  const config = new AppConfig({
-    NODE_ENV: 'test',
-    PORT: 3000,
-    AWS_REGION: 'us-east-1',
-    DYNAMODB_LOCAL_ENDPOINT: undefined,
-    USERS_TABLE: 'test-users',
-    PRODUCTS_TABLE: 'test-products',
-  });
+  const config = buildTestConfig({ USERS_TABLE: 'test-users' });
 
   let repository: DynamoUsersRepository;
 

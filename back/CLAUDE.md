@@ -41,4 +41,6 @@ These choices are agreed with the user. Ask before you change one.
 - Add each new env variable in three places: `src/config/env.schema.ts`, `AppConfig`, and `.env.example`.
 - Table key schemas live in `src/database/tables.ts`. Change a key there, and Terraform must match it.
 - When `DYNAMODB_LOCAL_ENDPOINT` is set, the client sends placeholder credentials, because DynamoDB Local accepts any. Without it, the client uses the default AWS credential chain.
+- The app is on NestJS 11, which is CommonJS. Version 12 of `@nestjs/*` packages, such as `@nestjs/jwt` 12, is ESM-only and fails to load in Jest. Install the version that matches Nest 11.
+- `JWT_SECRET` has no default. `test/setup-env.ts` sets it for the e2e specs, and unit specs build their config with `buildTestConfig` from `src/config/testing/`.
 - A Docker build must install with `npm ci --ignore-scripts`. The `prepare` script needs `.git` and Husky.
