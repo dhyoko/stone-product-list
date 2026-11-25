@@ -52,7 +52,7 @@ back/
 - Do not use `any`. Type external data as `unknown` and parse it.
 - Do not use `as` casts, except after a check that proves the type. Prefer `satisfies` for literal objects.
 - Use a type guard named `isX` or `hasX` only when it checks every property it claims.
-- Brand IDs that share a primitive type: `type UserId = string & { readonly __brand: 'UserId' }`. Create a branded value only in one parse function.
+- Brand IDs that share a primitive type with a zod schema: `const userIdSchema = z.uuid().brand<'UserId'>()`, then `type UserId = z.infer<typeof userIdSchema>`. Create a branded value only by parsing it with that schema.
 - Model variants as discriminated unions with a `kind` field. End a `switch` over a union with `const _exhaustive: never = value`.
 - Pass an object when a function takes more than two arguments.
 
@@ -119,6 +119,7 @@ Return domain types from services, not DynamoDB items. Never return a password h
 - Write unit specs as `*.spec.ts` next to the file they test. Put e2e specs in `test/`.
 - Build the unit under test with `Test.createTestingModule`, and mock its collaborators with `useValue`.
 - Do not call AWS in a unit spec. Mock the repository port in service specs. Mock the DynamoDB client in repository specs.
+- Write a fake of a port as a subclass in the feature's `testing/` folder, such as `InMemoryUsersRepository`. The `no-unsafe-class-instance-assignment` lint rule rejects an object literal where an abstract class is expected. The build and the coverage report skip `testing/` folders.
 - Assert what a caller sees: the return value, the error class and code, and the collaborator calls that matter.
 - Test every error path, not only the success path.
 - Name each test by the behavior: `it('returns the next cursor when more items exist')`.

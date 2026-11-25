@@ -22,6 +22,8 @@ This is the back-end for the product listing challenge. It is a NestJS 11 API in
    cp .env.example .env
    ```
 
+   Set `JWT_SECRET` to at least 32 random characters. You can generate one with `openssl rand -base64 48`.
+
 3. Start DynamoDB Local. It keeps its data in a Docker volume, so the tables survive a restart:
 
    ```bash
@@ -34,7 +36,13 @@ This is the back-end for the product listing challenge. It is a NestJS 11 API in
    npm run db:create-tables
    ```
 
-5. Start the API in watch mode:
+5. Create the demo user. The script skips a user that already exists:
+
+   ```bash
+   npm run db:seed
+   ```
+
+6. Start the API in watch mode:
 
    ```bash
    npm run start:dev
@@ -42,24 +50,26 @@ This is the back-end for the product listing challenge. It is a NestJS 11 API in
 
 To delete the local data, run `docker compose down -v`.
 
+The demo user logs in with the email `demo@example.com` and the `SEED_USER_PASSWORD` value from `.env`. The API has no sign-up route, so the seed script is the only way to create users.
+
 The API reads its settings from environment variables. `.env.example` lists each variable with its default. A variable set in the shell wins over the value in `.env`. The API does not start when a variable is invalid, and the error names each invalid variable.
 
 ## Scripts
 
-| Script                     | What it does                                        |
-| -------------------------- | --------------------------------------------------- |
-| `npm run build`            | Compiles `src/` to `dist/`.                         |
-| `npm run start:dev`        | Starts the API and restarts it when a file changes. |
-| `npm run start:prod`       | Starts the compiled API from `dist/`.               |
-| `npm run typecheck`        | Runs the TypeScript compiler without output.        |
-| `npm run lint`             | Runs ESLint and reports problems.                   |
-| `npm run lint:fix`         | Runs ESLint and fixes what it can.                  |
-| `npm run format`           | Formats all files with Prettier.                    |
-| `npm run format:check`     | Checks that all files match the Prettier format.    |
-| `npm test`                 | Runs the unit tests.                                |
-| `npm run test:cov`         | Runs the unit tests with a coverage report.         |
-| `npm run test:e2e`         | Runs the end-to-end tests in `test/`.               |
-| `npm run db:create-tables` | Creates the DynamoDB tables that are missing.       |
+| Script                     | What it does                                                            |
+| -------------------------- | ----------------------------------------------------------------------- |
+| `npm run build`            | Compiles `src/` to `dist/`.                                             |
+| `npm run start:dev`        | Starts the API and restarts it when a file changes.                     |
+| `npm run start:prod`       | Starts the compiled API from `dist/`.                                   |
+| `npm run typecheck`        | Runs the TypeScript compiler without output.                            |
+| `npm run lint`             | Runs ESLint and reports problems.                                       |
+| `npm run lint:fix`         | Runs ESLint and fixes what it can.                                      |
+| `npm run format`           | Formats all files with Prettier.                                        |
+| `npm run format:check`     | Checks that all files match the Prettier format.                        |
+| `npm test`                 | Runs the unit tests.                                                    |
+| `npm run test:cov`         | Runs the unit tests with a coverage report.                             |
+| `npm run test:e2e`         | Runs the end-to-end tests in `test/`. They need DynamoDB Local running. |
+| `npm run db:create-tables` | Creates the DynamoDB tables that are missing.                           |
 
 ## Git hooks
 

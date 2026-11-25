@@ -23,6 +23,11 @@ jobs:
     name: Lint, type check, test, build
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    services:
+      dynamodb:
+        image: amazon/dynamodb-local:3.3.2
+        ports:
+          - 8000:8000
     defaults:
       run:
         working-directory: back
@@ -51,6 +56,8 @@ jobs:
 
       - name: End-to-end tests
         run: npm run test:e2e
+        env:
+          DYNAMODB_LOCAL_ENDPOINT: http://localhost:8000
 
       - name: Build
         run: npm run build

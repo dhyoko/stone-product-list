@@ -5,9 +5,11 @@ import { AppConfig } from './app-config';
 import { InvalidConfigError } from './invalid-config.error';
 import { loadConfig, loadEnvFile } from './load-config';
 
+const REQUIRED = { JWT_SECRET: 'a-secret-that-is-at-least-32-characters' };
+
 describe('loadConfig', () => {
   it('uses the defaults when no variables are set', () => {
-    const config = loadConfig({});
+    const config = loadConfig(REQUIRED);
 
     expect(config).toBeInstanceOf(AppConfig);
     expect(config.nodeEnv).toBe('development');
@@ -20,7 +22,7 @@ describe('loadConfig', () => {
   });
 
   it('reads the values that are set', () => {
-    const config = loadConfig({ NODE_ENV: 'production', PORT: '8080' });
+    const config = loadConfig({ ...REQUIRED, NODE_ENV: 'production', PORT: '8080' });
 
     expect(config.nodeEnv).toBe('production');
     expect(config.http.port).toBe(8080);
@@ -28,6 +30,7 @@ describe('loadConfig', () => {
 
   it('reads the DynamoDB values that are set', () => {
     const config = loadConfig({
+      ...REQUIRED,
       AWS_REGION: 'sa-east-1',
       DYNAMODB_LOCAL_ENDPOINT: 'http://localhost:8000',
       USERS_TABLE: 'dev-users',
@@ -42,7 +45,7 @@ describe('loadConfig', () => {
   });
 
   it('ignores variables that the schema does not define', () => {
-    const config = loadConfig({ HOME: '/home/user' });
+    const config = loadConfig({ ...REQUIRED, HOME: '/home/user' });
 
     expect(config).not.toHaveProperty('HOME');
   });
@@ -53,15 +56,17 @@ describe('loadConfig', () => {
     ['above 65535', '70000'],
     ['a decimal', '3000.5'],
   ])('rejects a PORT that is %s', (_case, port) => {
-    expect(() => loadConfig({ PORT: port })).toThrow(InvalidConfigError);
+    expect(() => loadConfig({ ...REQUIRED, PORT: port })).toThrow(InvalidConfigError);
   });
 
   it('rejects an unknown NODE_ENV', () => {
-    expect(() => loadConfig({ NODE_ENV: 'staging' })).toThrow(InvalidConfigError);
+    expect(() => loadConfig({ ...REQUIRED, NODE_ENV: 'staging' })).toThrow(InvalidConfigError);
   });
 
   it('rejects a DYNAMODB_LOCAL_ENDPOINT that is not a URL', () => {
-    expect(() => loadConfig({ DYNAMODB_LOCAL_ENDPOINT: 'localhost' })).toThrow(InvalidConfigError);
+    expect(() => loadConfig({ ...REQUIRED, DYNAMODB_LOCAL_ENDPOINT: 'localhost' })).toThrow(
+      InvalidConfigError,
+    );
   });
 
   it.each([
@@ -69,11 +74,35 @@ describe('loadConfig', () => {
     ['has a space', 'my users'],
     ['has a slash', 'users/v2'],
   ])('rejects a table name that is %s', (_case, name) => {
-    expect(() => loadConfig({ USERS_TABLE: name })).toThrow(InvalidConfigError);
+    expect(() => loadConfig({ ...REQUIRED, USERS_TABLE: name })).toThrow(InvalidConfigError);
+  });
+
+  it('reads the auth values and defaults the token lifetime to 15 minutes', () => {
+    expect(loadConfig(REQUIRED).auth).toEqual({
+      jwtSecret: REQUIRED.JWT_SECRET,
+      accessTokenTtlSeconds: 900,
+    });
+    expect(
+      loadConfig({ ...REQUIRED, ACCESS_TOKEN_TTL_SECONDS: '60' }).auth.accessTokenTtlSeconds,
+    ).toBe(60);
+  });
+
+  it('rejects a missing JWT_SECRET', () => {
+    expect(() => loadConfig({})).toThrow(/JWT_SECRET/);
+  });
+
+  it('rejects a JWT_SECRET shorter than 32 characters', () => {
+    expect(() => loadConfig({ JWT_SECRET: 'short-secret' })).toThrow(InvalidConfigError);
+  });
+
+  it.each(['59', '86401', 'abc'])('rejects an ACCESS_TOKEN_TTL_SECONDS of %p', (ttl) => {
+    expect(() => loadConfig({ ...REQUIRED, ACCESS_TOKEN_TTL_SECONDS: ttl })).toThrow(
+      InvalidConfigError,
+    );
   });
 
   it('names every invalid variable in the error message', () => {
-    const load = (): AppConfig => loadConfig({ NODE_ENV: 'staging', PORT: 'abc' });
+    const load = (): AppConfig => loadConfig({ ...REQUIRED, NODE_ENV: 'staging', PORT: 'abc' });
 
     expect(load).toThrow(/NODE_ENV/);
     expect(load).toThrow(/PORT/);

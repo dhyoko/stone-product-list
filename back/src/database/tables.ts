@@ -3,6 +3,8 @@ import type { TableNames } from '../config/app-config';
 
 export type TableDefinition = CreateTableCommandInput & { readonly TableName: string };
 
+export const USERS_BY_ID_INDEX = 'byId';
+
 export const PRODUCTS_BY_CREATED_AT_INDEX = 'byCreatedAt';
 
 export function buildTableDefinitions(names: TableNames): readonly TableDefinition[] {
@@ -10,8 +12,18 @@ export function buildTableDefinitions(names: TableNames): readonly TableDefiniti
     {
       TableName: names.users,
       BillingMode: 'PAY_PER_REQUEST',
-      AttributeDefinitions: [{ AttributeName: 'email', AttributeType: 'S' }],
+      AttributeDefinitions: [
+        { AttributeName: 'email', AttributeType: 'S' },
+        { AttributeName: 'id', AttributeType: 'S' },
+      ],
       KeySchema: [{ AttributeName: 'email', KeyType: 'HASH' }],
+      GlobalSecondaryIndexes: [
+        {
+          IndexName: USERS_BY_ID_INDEX,
+          KeySchema: [{ AttributeName: 'id', KeyType: 'HASH' }],
+          Projection: { ProjectionType: 'ALL' },
+        },
+      ],
     },
     {
       TableName: names.products,
