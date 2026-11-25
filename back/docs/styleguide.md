@@ -52,7 +52,7 @@ back/
 - Do not use `any`. Type external data as `unknown` and parse it.
 - Do not use `as` casts, except after a check that proves the type. Prefer `satisfies` for literal objects.
 - Use a type guard named `isX` or `hasX` only when it checks every property it claims.
-- Brand IDs that share a primitive type: `type UserId = string & { readonly __brand: 'UserId' }`. Create a branded value only in one parse function.
+- Brand IDs that share a primitive type with a zod schema: `const userIdSchema = z.uuid().brand<'UserId'>()`, then `type UserId = z.infer<typeof userIdSchema>`. Create a branded value only by parsing it with that schema.
 - Model variants as discriminated unions with a `kind` field. End a `switch` over a union with `const _exhaustive: never = value`.
 - Pass an object when a function takes more than two arguments.
 
