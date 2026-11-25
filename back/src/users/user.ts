@@ -13,3 +13,7 @@ export interface User {
 export interface StoredUser extends User {
   readonly passwordHash: string;
 }
+
+export function normalizeEmail(email: string): string {
+  return email.trim().toLowerCase();
+}

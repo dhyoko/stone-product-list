@@ -7,7 +7,7 @@ const config: Config = {
   testRegex: '\\.spec\\.ts$',
   moduleFileExtensions: ['ts', 'js', 'json'],
   transform: {
-    '^.+\\.ts$': 'ts-jest',
+    '^.+\\.ts$': ['ts-jest', { tsconfig: { isolatedModules: false } }],
   },
   clearMocks: true,
   restoreMocks: true,

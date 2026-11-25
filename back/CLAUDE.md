@@ -43,4 +43,5 @@ These choices are agreed with the user. Ask before you change one.
 - When `DYNAMODB_LOCAL_ENDPOINT` is set, the client sends placeholder credentials, because DynamoDB Local accepts any. Without it, the client uses the default AWS credential chain.
 - The app is on NestJS 11, which is CommonJS. Version 12 of `@nestjs/*` packages, such as `@nestjs/jwt` 12, is ESM-only and fails to load in Jest. Install the version that matches Nest 11.
 - `JWT_SECRET` has no default. `test/setup-env.ts` sets it for the e2e specs, and unit specs build their config with `buildTestConfig` from `src/config/testing/`.
+- `jest.config.ts` runs ts-jest with `isolatedModules: false`. With it on, the decorator metadata for each injected constructor parameter compiles to a branch that never runs, and branch coverage drops under the threshold.
 - A Docker build must install with `npm ci --ignore-scripts`. The `prepare` script needs `.git` and Husky.

@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import type { PasswordHasher } from './password-hasher';
-import { userIdSchema } from './user';
+import { normalizeEmail, userIdSchema } from './user';
 import { UserAlreadyExistsError } from './user-already-exists.error';
 import type { UsersRepository } from './users.repository';
 
@@ -41,7 +41,7 @@ async function seedUser({
   try {
     await repository.create({
       id: userIdSchema.parse(randomUUID()),
-      email: user.email,
+      email: normalizeEmail(user.email),
       name: user.name,
       passwordHash: await hasher.hash(user.password),
     });
