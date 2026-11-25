@@ -12,6 +12,11 @@ describe('loadConfig', () => {
     expect(config).toBeInstanceOf(AppConfig);
     expect(config.nodeEnv).toBe('development');
     expect(config.http.port).toBe(3000);
+    expect(config.dynamoDb).toEqual({
+      region: 'us-east-1',
+      localEndpoint: undefined,
+      tables: { users: 'product-api-users', products: 'product-api-products' },
+    });
   });
 
   it('reads the values that are set', () => {
@@ -19,6 +24,21 @@ describe('loadConfig', () => {
 
     expect(config.nodeEnv).toBe('production');
     expect(config.http.port).toBe(8080);
+  });
+
+  it('reads the DynamoDB values that are set', () => {
+    const config = loadConfig({
+      AWS_REGION: 'sa-east-1',
+      DYNAMODB_LOCAL_ENDPOINT: 'http://localhost:8000',
+      USERS_TABLE: 'dev-users',
+      PRODUCTS_TABLE: 'dev-products',
+    });
+
+    expect(config.dynamoDb).toEqual({
+      region: 'sa-east-1',
+      localEndpoint: 'http://localhost:8000',
+      tables: { users: 'dev-users', products: 'dev-products' },
+    });
   });
 
   it('ignores variables that the schema does not define', () => {
@@ -38,6 +58,18 @@ describe('loadConfig', () => {
 
   it('rejects an unknown NODE_ENV', () => {
     expect(() => loadConfig({ NODE_ENV: 'staging' })).toThrow(InvalidConfigError);
+  });
+
+  it('rejects a DYNAMODB_LOCAL_ENDPOINT that is not a URL', () => {
+    expect(() => loadConfig({ DYNAMODB_LOCAL_ENDPOINT: 'localhost' })).toThrow(InvalidConfigError);
+  });
+
+  it.each([
+    ['too short', 'ab'],
+    ['has a space', 'my users'],
+    ['has a slash', 'users/v2'],
+  ])('rejects a table name that is %s', (_case, name) => {
+    expect(() => loadConfig({ USERS_TABLE: name })).toThrow(InvalidConfigError);
   });
 
   it('names every invalid variable in the error message', () => {

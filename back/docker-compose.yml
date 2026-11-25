@@ -1,0 +1,16 @@
+name: product-api
+
+services:
+  dynamodb:
+    image: amazon/dynamodb-local:3.3.2
+    command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb', '-dbPath', '/home/dynamodblocal/data']
+    # The image runs as a user that cannot write to a new named volume.
+    user: root
+    working_dir: /home/dynamodblocal
+    ports:
+      - '8000:8000'
+    volumes:
+      - dynamodb-data:/home/dynamodblocal/data
+
+volumes:
+  dynamodb-data:

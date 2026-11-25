@@ -34,4 +34,6 @@ These choices are agreed with the user. Ask before you change one.
 - `test/jest-e2e.config.ts` sets `passWithNoTests` because no e2e specs exist yet. Remove it when you add the first e2e spec.
 - Jest gives each test file its own copy of `process.env`. Code that writes env variables takes the target object as a parameter, as `loadEnvFile` does, so specs can pass a plain object.
 - Add each new env variable in three places: `src/config/env.schema.ts`, `AppConfig`, and `.env.example`.
+- Table key schemas live in `src/database/tables.ts`. Change a key there, and Terraform must match it.
+- When `DYNAMODB_LOCAL_ENDPOINT` is set, the client sends placeholder credentials, because DynamoDB Local accepts any. Without it, the client uses the default AWS credential chain.
 - A Docker build must install with `npm ci --ignore-scripts`. The `prepare` script needs `.git` and Husky.

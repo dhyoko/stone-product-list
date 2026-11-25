@@ -11,7 +11,7 @@ const config: Config = {
   },
   clearMocks: true,
   restoreMocks: true,
-  collectCoverageFrom: ['src/**/*.ts', '!src/main.ts', '!src/**/*.module.ts'],
+  collectCoverageFrom: ['src/**/*.ts', '!src/main.ts', '!src/**/*.module.ts', '!src/scripts/**'],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov'],
   coverageThreshold: {
