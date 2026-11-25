@@ -72,4 +72,20 @@ describe('UsersService', () => {
       expect(hash).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('findById', () => {
+    it('returns the user without the password hash', async () => {
+      await expect(service.findById(ana.id)).resolves.toEqual({
+        id: ana.id,
+        email: 'ana@example.com',
+        name: 'Ana',
+      });
+    });
+
+    it('returns undefined when no user has the id', async () => {
+      const unknown = userIdSchema.parse('00000000-0000-4000-8000-000000000000');
+
+      await expect(service.findById(unknown)).resolves.toBeUndefined();
+    });
+  });
 });

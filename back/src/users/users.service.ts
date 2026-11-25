@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PasswordHasher } from './password-hasher';
-import { normalizeEmail, type User } from './user';
+import { normalizeEmail, type StoredUser, type User, type UserId } from './user';
 import { UsersRepository } from './users.repository';
 
 const DUMMY_PASSWORD = 'dummy-password-for-unknown-emails';
@@ -27,11 +27,20 @@ export class UsersService {
       hash: stored.passwordHash,
       password: input.password,
     });
-    return isMatch ? { id: stored.id, email: stored.email, name: stored.name } : undefined;
+    return isMatch ? toUser(stored) : undefined;
+  }
+
+  async findById(id: UserId): Promise<User | undefined> {
+    const stored = await this.repository.findById(id);
+    return stored === undefined ? undefined : toUser(stored);
   }
 
   private async spendHashTimeToHideUnknownEmail(password: string): Promise<void> {
     this.dummyHash ??= this.hasher.hash(DUMMY_PASSWORD);
     await this.hasher.verify({ hash: await this.dummyHash, password });
   }
+}
+
+function toUser({ id, email, name }: StoredUser): User {
+  return { id, email, name };
 }

@@ -1,9 +1,15 @@
 import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
+import {
+  DynamoDBDocumentClient,
+  GetCommand,
+  PutCommand,
+  QueryCommand,
+} from '@aws-sdk/lib-dynamodb';
 import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
 import { AppConfig } from '../config/app-config';
-import { type StoredUser, userIdSchema } from './user';
+import { USERS_BY_ID_INDEX } from '../database/tables';
+import { type StoredUser, type UserId, userIdSchema } from './user';
 import { UserAlreadyExistsError } from './user-already-exists.error';
 import { UsersRepository } from './users.repository';
 
@@ -33,6 +39,20 @@ export class DynamoUsersRepository extends UsersRepository {
       new GetCommand({ TableName: this.tableName, Key: { email } }),
     );
     return Item === undefined ? undefined : userItemSchema.parse(Item);
+  }
+
+  async findById(id: UserId): Promise<StoredUser | undefined> {
+    const { Items = [] } = await this.client.send(
+      new QueryCommand({
+        TableName: this.tableName,
+        IndexName: USERS_BY_ID_INDEX,
+        KeyConditionExpression: 'id = :id',
+        ExpressionAttributeValues: { ':id': id },
+        Limit: 1,
+      }),
+    );
+    const [item] = Items;
+    return item === undefined ? undefined : userItemSchema.parse(item);
   }
 
   async create(user: StoredUser): Promise<void> {

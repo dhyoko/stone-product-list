@@ -36,7 +36,8 @@ These choices are agreed with the user. Ask before you change one.
 
 - The git root is the parent folder. Husky is installed with `cd .. && husky back/.husky`, and each hook starts with `cd back`.
 - `tsconfig.build.json` includes only `src/`. A root-level `.ts` file in the build moves `main.js` to `dist/src/` and breaks `start:prod`.
-- The e2e specs build the app from `AppModule` and do not reach DynamoDB. Start DynamoDB Local before you add an e2e spec that reads or writes data.
+- The e2e specs need DynamoDB Local. Start it with `docker compose up -d` before `npm run test:e2e`. `test/setup-env.ts` gives each run its own tables, and the specs delete them at the end, so a run never touches the tables from `.env`.
+- `npm run db:create-tables` skips a table that exists, so it does not add a new index to an old table. After you change a table in `src/database/tables.ts`, delete the local data with `docker compose down -v` and create the tables again.
 - Jest gives each test file its own copy of `process.env`. Code that writes env variables takes the target object as a parameter, as `loadEnvFile` does, so specs can pass a plain object.
 - Add each new env variable in three places: `src/config/env.schema.ts`, `AppConfig`, and `.env.example`.
 - Table key schemas live in `src/database/tables.ts`. Change a key there, and Terraform must match it.

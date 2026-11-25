@@ -1,5 +1,10 @@
 import { ConditionalCheckFailedException, DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
+import {
+  DynamoDBDocumentClient,
+  GetCommand,
+  PutCommand,
+  QueryCommand,
+} from '@aws-sdk/lib-dynamodb';
 import { Test } from '@nestjs/testing';
 import { mockClient } from 'aws-sdk-client-mock';
 import { ZodError } from 'zod';
@@ -63,6 +68,30 @@ describe('DynamoUsersRepository', () => {
       dynamoDb.on(GetCommand).resolves({ Item: { ...user, id: 'user-1' } });
 
       await expect(repository.findByEmail('ana@example.com')).rejects.toBeInstanceOf(ZodError);
+    });
+  });
+
+  describe('findById', () => {
+    it('queries the byId index for one user', async () => {
+      dynamoDb.on(QueryCommand).resolves({ Items: [{ ...user }] });
+
+      await expect(repository.findById(user.id)).resolves.toEqual(user);
+      expect(dynamoDb.commandCalls(QueryCommand)[0]?.args[0].input).toEqual({
+        TableName: 'test-users',
+        IndexName: 'byId',
+        KeyConditionExpression: 'id = :id',
+        ExpressionAttributeValues: { ':id': user.id },
+        Limit: 1,
+      });
+    });
+
+    it.each([
+      ['an empty list', { Items: [] }],
+      ['no list', {}],
+    ])('returns undefined when the query returns %s', async (_case, output) => {
+      dynamoDb.on(QueryCommand).resolves(output);
+
+      await expect(repository.findById(user.id)).resolves.toBeUndefined();
     });
   });
 

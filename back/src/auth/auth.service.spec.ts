@@ -10,6 +10,7 @@ import { UsersRepository } from '../users/users.repository';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
 import { InvalidCredentialsError } from './invalid-credentials.error';
+import { InvalidTokenError } from './invalid-token.error';
 import { createJwtOptions } from './jwt-options';
 import { TokenService } from './token.service';
 
@@ -64,6 +65,22 @@ describe('AuthService', () => {
         code: 'AUTH_INVALID_CREDENTIALS',
         message: 'Invalid email or password',
       });
+    });
+  });
+
+  describe('getCurrentUser', () => {
+    it('returns the user with the id', async () => {
+      await expect(service.getCurrentUser(ANA_ID)).resolves.toEqual({
+        id: ANA_ID,
+        email: 'ana@example.com',
+        name: 'Ana',
+      });
+    });
+
+    it('throws InvalidTokenError when the user no longer exists', async () => {
+      const deleted = userIdSchema.parse('00000000-0000-4000-8000-000000000000');
+
+      await expect(service.getCurrentUser(deleted)).rejects.toBeInstanceOf(InvalidTokenError);
     });
   });
 });

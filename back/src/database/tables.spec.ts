@@ -1,4 +1,4 @@
-import { buildTableDefinitions, PRODUCTS_BY_CREATED_AT_INDEX } from './tables';
+import { buildTableDefinitions, PRODUCTS_BY_CREATED_AT_INDEX, USERS_BY_ID_INDEX } from './tables';
 
 describe('buildTableDefinitions', () => {
   const [users, products] = buildTableDefinitions({ users: 'dev-users', products: 'dev-products' });
@@ -8,6 +8,15 @@ describe('buildTableDefinitions', () => {
       TableName: 'dev-users',
       KeySchema: [{ AttributeName: 'email', KeyType: 'HASH' }],
     });
+  });
+
+  it('adds an index that finds a user by id', () => {
+    expect(users?.GlobalSecondaryIndexes).toEqual([
+      expect.objectContaining({
+        IndexName: USERS_BY_ID_INDEX,
+        KeySchema: [{ AttributeName: 'id', KeyType: 'HASH' }],
+      }),
+    ]);
   });
 
   it('keys the products table by id', () => {
