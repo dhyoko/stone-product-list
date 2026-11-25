@@ -1,0 +1,56 @@
+name: Back-end CI
+
+on:
+  pull_request:
+    paths:
+      - "back/**"
+      - ".github/workflows/back-ci.yml"
+  push:
+    branches: [master]
+    paths:
+      - "back/**"
+      - ".github/workflows/back-ci.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: back-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Lint, type check, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: back
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: back/.nvmrc
+          cache: npm
+          cache-dependency-path: back/package-lock.json
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Test with coverage
+        run: npm run test:cov
+
+      - name: End-to-end tests
+        run: npm run test:e2e
+
+      - name: Build
+        run: npm run build

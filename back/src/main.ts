@@ -1,11 +1,15 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { setupOpenApi } from './common/openapi/setup-openapi';
+import { AppConfig } from './config/app-config';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
   app.enableShutdownHooks();
-  await app.listen(process.env.PORT ?? 3000);
+  setupOpenApi(app);
+  const config = app.get(AppConfig);
+  await app.listen(config.http.port);
 }
 
 bootstrap().catch((error: unknown) => {
