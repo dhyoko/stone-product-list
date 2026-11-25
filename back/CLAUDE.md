@@ -31,5 +31,7 @@ These choices are agreed with the user. Ask before you change one.
 
 - The git root is the parent folder. Husky is installed with `cd .. && husky back/.husky`, and each hook starts with `cd back`.
 - `tsconfig.build.json` includes only `src/`. A root-level `.ts` file in the build moves `main.js` to `dist/src/` and breaks `start:prod`.
-- `jest.config.ts` and `test/jest-e2e.config.ts` set `passWithNoTests` because no specs exist yet. Remove it when you add the first spec.
+- `test/jest-e2e.config.ts` sets `passWithNoTests` because no e2e specs exist yet. Remove it when you add the first e2e spec.
+- Jest gives each test file its own copy of `process.env`. Code that writes env variables takes the target object as a parameter, as `loadEnvFile` does, so specs can pass a plain object.
+- Add each new env variable in three places: `src/config/env.schema.ts`, `AppConfig`, and `.env.example`.
 - A Docker build must install with `npm ci --ignore-scripts`. The `prepare` script needs `.git` and Husky.

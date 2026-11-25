@@ -15,13 +15,19 @@ This is the back-end for the product listing challenge. It is a NestJS 11 API in
    npm install
    ```
 
-2. Start the API in watch mode:
+2. Create your `.env` file from the example, and change the values you need:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Start the API in watch mode:
 
    ```bash
    npm run start:dev
    ```
 
-The API listens on port 3000. Set `PORT` to use another port.
+The API reads its settings from environment variables. `.env.example` lists each variable with its default. A variable set in the shell wins over the value in `.env`. The API does not start when a variable is invalid, and the error names each invalid variable.
 
 ## Scripts
 

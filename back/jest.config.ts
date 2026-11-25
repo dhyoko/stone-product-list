@@ -11,7 +11,6 @@ const config: Config = {
   },
   clearMocks: true,
   restoreMocks: true,
-  passWithNoTests: true,
   collectCoverageFrom: ['src/**/*.ts', '!src/main.ts', '!src/**/*.module.ts'],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov'],
