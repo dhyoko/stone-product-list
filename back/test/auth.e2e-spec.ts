@@ -4,19 +4,13 @@ import { JwtService } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import type { App } from 'supertest/types';
-import { z } from 'zod';
 import { AppModule } from '../src/app.module';
 import { AppConfig } from '../src/config/app-config';
 import { Argon2PasswordHasher } from '../src/users/argon2-password-hasher';
 import { seedUsers } from '../src/users/seed-users';
 import { UsersRepository } from '../src/users/users.repository';
+import { logIn, loginResponseSchema } from './support/log-in';
 import { createTestTables, deleteTestTables } from './support/test-tables';
-
-const loginResponseSchema = z.object({
-  accessToken: z.string(),
-  tokenType: z.literal('Bearer'),
-  expiresIn: z.number(),
-});
 
 const DEMO = { email: 'demo@example.com', name: 'Demo User', password: 'demo-password' };
 
@@ -43,13 +37,6 @@ describe('Auth (e2e)', () => {
     await deleteTestTables(client, config);
     await app.close();
   });
-
-  async function logIn(): Promise<string> {
-    const response = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send({ email: DEMO.email, password: DEMO.password });
-    return loginResponseSchema.parse(response.body).accessToken;
-  }
 
   describe('POST /auth/login', () => {
     it('returns a bearer token for valid credentials', async () => {
@@ -94,7 +81,7 @@ describe('Auth (e2e)', () => {
 
   describe('GET /auth/me', () => {
     it('returns the user that the token belongs to', async () => {
-      const token = await logIn();
+      const token = await logIn(app, DEMO);
 
       const response = await request(app.getHttpServer())
         .get('/auth/me')
