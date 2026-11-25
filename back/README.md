@@ -39,6 +39,15 @@ The API listens on port 3000. Set `PORT` to use another port.
 | `npm run test:cov`     | Runs the unit tests with a coverage report.         |
 | `npm run test:e2e`     | Runs the end-to-end tests in `test/`.               |
 
+## Git hooks
+
+`npm install` sets up the hooks with Husky. The hooks check files and never change them.
+
+- `pre-commit` runs ESLint and Prettier on the staged files in `back/`. When a staged file is a `.ts` file, it also runs `tsc --noEmit` on the whole project.
+- `pre-push` runs `npm run test:cov`. The push fails when a test fails or coverage is below the threshold.
+
+When a hook fails, run `npm run lint:fix` or `npm run format`, stage the changes, and commit again.
+
 ## Code rules
 
 Read the [back-end styleguide](docs/styleguide.md) before you change code.
