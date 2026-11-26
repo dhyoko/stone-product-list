@@ -20,6 +20,12 @@ export interface AuthConfig {
   readonly accessTokenTtlSeconds: number;
 }
 
+export interface RateLimitConfig {
+  readonly windowSeconds: number;
+  readonly perUser: number;
+  readonly perIp: number;
+}
+
 /**
  * Typed application config. Inject this class instead of reading `process.env`.
  */
@@ -29,6 +35,7 @@ export class AppConfig {
   readonly dynamoDb: DynamoDbConfig;
   readonly redis: RedisConfig;
   readonly auth: AuthConfig;
+  readonly rateLimit: RateLimitConfig;
 
   constructor(env: Env) {
     this.nodeEnv = env.NODE_ENV;
@@ -42,6 +49,11 @@ export class AppConfig {
     this.auth = {
       jwtSecret: env.JWT_SECRET,
       accessTokenTtlSeconds: env.ACCESS_TOKEN_TTL_SECONDS,
+    };
+    this.rateLimit = {
+      windowSeconds: env.RATE_LIMIT_WINDOW_SECONDS,
+      perUser: env.RATE_LIMIT_PER_USER,
+      perIp: env.RATE_LIMIT_PER_IP,
     };
   }
 }

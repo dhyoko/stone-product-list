@@ -4,6 +4,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import type { AuthenticatedUser } from '../common/auth/authenticated-request';
 import { userIdSchema } from '../users/user';
 import { RateLimitExceededError } from './rate-limit-exceeded.error';
+import { createRateLimitOptions } from './rate-limit-options';
 import { RateLimitGuard } from './rate-limit.guard';
 
 class ProductsController {
@@ -46,27 +47,44 @@ function buildContext(input: {
   return { context, response };
 }
 
+type RequestInput = Parameters<typeof buildContext>[0];
+
 describe('RateLimitGuard', () => {
   let guard: RateLimitGuard;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [ThrottlerModule.forRoot({ throttlers: [{ ttl: 60_000, limit: 1 }] })],
+      imports: [
+        ThrottlerModule.forRoot(
+          createRateLimitOptions({ config: { windowSeconds: 60, perUser: 2, perIp: 1 } }),
+        ),
+      ],
       providers: [RateLimitGuard],
     }).compile();
     guard = moduleRef.get(RateLimitGuard);
     await guard.onModuleInit();
   });
 
+  function send(input: RequestInput): Promise<boolean> {
+    return guard.canActivate(buildContext(input).context);
+  }
+
+  async function sendTimes(input: RequestInput, times: number): Promise<void> {
+    for (let sent = 0; sent < times; sent += 1) {
+      await send(input);
+    }
+  }
+
   it('lets a request through while it is under the limit', async () => {
     const { context, response } = buildContext({ ip: '203.0.113.7', user: ALICE });
 
     await expect(guard.canActivate(context)).resolves.toBe(true);
-    expect(response.header).toHaveBeenCalledWith('X-RateLimit-Remaining', 0);
+    expect(response.header).toHaveBeenCalledWith('X-RateLimit-Limit', 2);
+    expect(response.header).toHaveBeenCalledWith('X-RateLimit-Remaining', 1);
   });
 
   it('rejects a request over the limit with a retry delay', async () => {
-    await guard.canActivate(buildContext({ ip: '203.0.113.7', user: ALICE }).context);
+    await sendTimes({ ip: '203.0.113.7', user: ALICE }, 2);
     const { context, response } = buildContext({ ip: '203.0.113.7', user: ALICE });
 
     await expect(guard.canActivate(context)).rejects.toBeInstanceOf(RateLimitExceededError);
@@ -74,45 +92,39 @@ describe('RateLimitGuard', () => {
   });
 
   it('counts each user apart, even from the same IP', async () => {
-    await guard.canActivate(buildContext({ ip: '203.0.113.7', user: ALICE }).context);
+    await sendTimes({ ip: '203.0.113.7', user: ALICE }, 2);
 
-    await expect(
-      guard.canActivate(buildContext({ ip: '203.0.113.7', user: BOB }).context),
-    ).resolves.toBe(true);
+    await expect(send({ ip: '203.0.113.7', user: BOB })).resolves.toBe(true);
   });
 
   it('counts the same user as one, even from different IPs', async () => {
-    await guard.canActivate(buildContext({ ip: '203.0.113.7', user: ALICE }).context);
+    await sendTimes({ ip: '203.0.113.7', user: ALICE }, 2);
 
-    await expect(
-      guard.canActivate(buildContext({ ip: '198.51.100.9', user: ALICE }).context),
-    ).rejects.toBeInstanceOf(RateLimitExceededError);
-  });
-
-  it('counts a request with no user by its IP', async () => {
-    await guard.canActivate(buildContext({ ip: '203.0.113.7' }).context);
-
-    await expect(guard.canActivate(buildContext({ ip: '198.51.100.9' }).context)).resolves.toBe(
-      true,
-    );
-    await expect(
-      guard.canActivate(buildContext({ ip: '203.0.113.7' }).context),
-    ).rejects.toBeInstanceOf(RateLimitExceededError);
-  });
-
-  it('keeps the IP count apart from the user count', async () => {
-    await guard.canActivate(buildContext({ ip: '203.0.113.7', user: ALICE }).context);
-
-    await expect(guard.canActivate(buildContext({ ip: '203.0.113.7' }).context)).resolves.toBe(
-      true,
+    await expect(send({ ip: '198.51.100.9', user: ALICE })).rejects.toBeInstanceOf(
+      RateLimitExceededError,
     );
   });
 
   it('shares one count across all routes for a user', async () => {
-    await guard.canActivate(buildContext({ ip: '203.0.113.7', user: ALICE }).context);
+    await sendTimes({ ip: '203.0.113.7', user: ALICE }, 2);
 
-    await expect(
-      guard.canActivate(buildContext({ ip: '203.0.113.7', user: ALICE, route: 'me' }).context),
-    ).rejects.toBeInstanceOf(RateLimitExceededError);
+    await expect(send({ ip: '203.0.113.7', user: ALICE, route: 'me' })).rejects.toBeInstanceOf(
+      RateLimitExceededError,
+    );
+  });
+
+  it('counts a request with no user by its IP, with the IP limit', async () => {
+    const { context, response } = buildContext({ ip: '203.0.113.7' });
+    await guard.canActivate(context);
+
+    expect(response.header).toHaveBeenCalledWith('X-RateLimit-Limit', 1);
+    await expect(send({ ip: '198.51.100.9' })).resolves.toBe(true);
+    await expect(send({ ip: '203.0.113.7' })).rejects.toBeInstanceOf(RateLimitExceededError);
+  });
+
+  it('keeps the IP count apart from the user count', async () => {
+    await sendTimes({ ip: '203.0.113.7', user: ALICE }, 2);
+
+    await expect(send({ ip: '203.0.113.7' })).resolves.toBe(true);
   });
 });

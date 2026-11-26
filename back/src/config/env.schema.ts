@@ -12,6 +12,9 @@ export const envSchema = z.object({
   REDIS_URL: z.url({ protocol: /^rediss?$/ }).default('redis://localhost:6379'),
   JWT_SECRET: z.string().min(32),
   ACCESS_TOKEN_TTL_SECONDS: z.coerce.number().int().min(60).max(86_400).default(900),
+  RATE_LIMIT_WINDOW_SECONDS: z.coerce.number().int().min(1).max(3600).default(60),
+  RATE_LIMIT_PER_USER: z.coerce.number().int().min(1).max(10_000).default(60),
+  RATE_LIMIT_PER_IP: z.coerce.number().int().min(1).max(10_000).default(5),
 });
 
 export type Env = z.infer<typeof envSchema>;

@@ -28,7 +28,7 @@ These choices are agreed with the user. Ask before you change one.
 - Passwords are hashed with argon2.
 - Login returns an HS256 access token that expires after 15 minutes. The API issues no refresh token.
 - Pagination uses an opaque base64url cursor built from the DynamoDB `LastEvaluatedKey`, not page numbers. The API returns a 400 for a cursor that does not decode. The page size is 20 by default and 100 at most.
-- Rate limiting has two layers. In AWS, API Gateway and WAF set a global cap and a per-IP cap on login. In the app, `@nestjs/throttler` sets a per-user cap from the JWT. Its counters live in Redis, so all instances share them.
+- Rate limiting has two layers. In AWS, API Gateway and WAF set a global cap and a per-IP cap on login. In the app, `@nestjs/throttler` sets one cap per user from the JWT, for all routes together. A request with no user, such as a login, counts against a lower cap per IP. `/health` has no cap. The counters live in Redis, so all instances share them.
 - The API runs on Lambda behind an API Gateway REST API. A REST API is used because WAF does not attach to an HTTP API. In AWS, the Lambda runs in a VPC to reach ElastiCache, and the JWT secret comes from SSM.
 - The project runs locally with no AWS account. Docker Compose runs the local services: DynamoDB Local and Redis. The Terraform phase applies Terraform to a local AWS emulator. Pick the emulator with the user in that phase.
 
