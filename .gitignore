@@ -80,6 +80,13 @@ out
 
 back/build/
 
+infra/.terraform/
+infra/*.tfstate
+infra/*.tfstate.*
+infra/*.tfvars
+!infra/*.tfvars.example
+infra/*.tfplan
+
 # Nuxt.js build / generate output
 .nuxt
 dist
