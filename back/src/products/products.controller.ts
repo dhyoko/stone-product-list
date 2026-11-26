@@ -8,6 +8,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { ErrorResponseDto } from '../common/errors/error-response.dto';
+import { ApiRateLimitedResponse } from '../rate-limit/api-rate-limited-response.decorator';
 import { ListProductsQueryDto } from './dto/list-products-query.dto';
 import { ProductPageResponseDto } from './dto/product-page-response.dto';
 import { ProductsService } from './products.service';
@@ -29,6 +30,7 @@ export class ProductsController {
     type: ErrorResponseDto,
     description: 'The access token is missing, expired, or not valid',
   })
+  @ApiRateLimitedResponse()
   async list(@Query() query: ListProductsQueryDto): Promise<ProductPageResponseDto> {
     return new ProductPageResponseDto(
       await this.productsService.list({ limit: query.limit, cursor: query.cursor }),

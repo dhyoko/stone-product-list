@@ -11,9 +11,20 @@ export interface DynamoDbConfig {
   readonly tables: TableNames;
 }
 
+export interface RedisConfig {
+  readonly url: string;
+  readonly keyPrefix: string;
+}
+
 export interface AuthConfig {
   readonly jwtSecret: string;
   readonly accessTokenTtlSeconds: number;
+}
+
+export interface RateLimitConfig {
+  readonly windowSeconds: number;
+  readonly perUser: number;
+  readonly perIp: number;
 }
 
 /**
@@ -23,7 +34,9 @@ export class AppConfig {
   readonly nodeEnv: Env['NODE_ENV'];
   readonly http: { readonly port: number };
   readonly dynamoDb: DynamoDbConfig;
+  readonly redis: RedisConfig;
   readonly auth: AuthConfig;
+  readonly rateLimit: RateLimitConfig;
 
   constructor(env: Env) {
     this.nodeEnv = env.NODE_ENV;
@@ -33,9 +46,15 @@ export class AppConfig {
       localEndpoint: env.DYNAMODB_LOCAL_ENDPOINT,
       tables: { users: env.USERS_TABLE, products: env.PRODUCTS_TABLE },
     };
+    this.redis = { url: env.REDIS_URL, keyPrefix: env.REDIS_KEY_PREFIX };
     this.auth = {
       jwtSecret: env.JWT_SECRET,
       accessTokenTtlSeconds: env.ACCESS_TOKEN_TTL_SECONDS,
+    };
+    this.rateLimit = {
+      windowSeconds: env.RATE_LIMIT_WINDOW_SECONDS,
+      perUser: env.RATE_LIMIT_PER_USER,
+      perIp: env.RATE_LIMIT_PER_IP,
     };
   }
 }

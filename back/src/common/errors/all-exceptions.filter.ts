@@ -16,6 +16,7 @@ const STATUS_BY_CATEGORY: Readonly<Record<ErrorCategory, HttpStatus>> = {
   forbidden: HttpStatus.FORBIDDEN,
   not_found: HttpStatus.NOT_FOUND,
   conflict: HttpStatus.CONFLICT,
+  rate_limited: HttpStatus.TOO_MANY_REQUESTS,
 };
 
 const FIRST_SERVER_ERROR_STATUS = 500;

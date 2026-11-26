@@ -6,7 +6,7 @@ This is the back-end for the product listing challenge. It is a NestJS 11 API in
 
 - Node.js 22. Run `nvm use` in this folder to switch to the version in `.nvmrc`.
 - npm 10 or later.
-- Docker with Docker Compose, to run DynamoDB Local.
+- Docker with Docker Compose, to run DynamoDB Local and Redis.
 
 ## Run the API
 
@@ -24,11 +24,13 @@ This is the back-end for the product listing challenge. It is a NestJS 11 API in
 
    Set `JWT_SECRET` to at least 32 random characters. You can generate one with `openssl rand -base64 48`.
 
-3. Start DynamoDB Local. It keeps its data in a Docker volume, so the tables survive a restart:
+3. Start DynamoDB Local and Redis. DynamoDB Local keeps its data in a Docker volume, so the tables survive a restart:
 
    ```bash
    docker compose up -d
    ```
+
+   Redis listens on port 6379. If another program already uses that port, set `REDIS_HOST_PORT` in `.env` to a free port, such as `6380`. Then set `REDIS_URL` to `redis://localhost:6380`.
 
 4. Create the tables. The script skips a table that already exists, so you can run it again:
 
@@ -54,23 +56,35 @@ The demo user logs in with the email `demo@example.com` and the `SEED_USER_PASSW
 
 The API reads its settings from environment variables. `.env.example` lists each variable with its default. A variable set in the shell wins over the value in `.env`. The API does not start when a variable is invalid, and the error names each invalid variable.
 
+## Rate limits
+
+The API limits how many requests a client sends in each window:
+
+- A request with a valid token counts against its user. One user can send 60 requests a minute across all routes.
+- A request without a user, such as a login, counts against its IP address. One IP can send 5 of these a minute.
+- `/health` has no limit.
+
+A request over the limit gets a 429 with the code `RATE_LIMIT_EXCEEDED`. The `Retry-After` header gives the seconds to wait. Each response under the limit has the `X-RateLimit-Limit`, `X-RateLimit-Remaining`, and `X-RateLimit-Reset` headers.
+
+Set `RATE_LIMIT_WINDOW_SECONDS`, `RATE_LIMIT_PER_USER`, and `RATE_LIMIT_PER_IP` to change the limits. The counters live in Redis, so they survive an API restart. To clear them, run `docker compose exec redis redis-cli flushall`.
+
 ## Scripts
 
-| Script                     | What it does                                                            |
-| -------------------------- | ----------------------------------------------------------------------- |
-| `npm run build`            | Compiles `src/` to `dist/`.                                             |
-| `npm run start:dev`        | Starts the API and restarts it when a file changes.                     |
-| `npm run start:prod`       | Starts the compiled API from `dist/`.                                   |
-| `npm run typecheck`        | Runs the TypeScript compiler without output.                            |
-| `npm run lint`             | Runs ESLint and reports problems.                                       |
-| `npm run lint:fix`         | Runs ESLint and fixes what it can.                                      |
-| `npm run format`           | Formats all files with Prettier.                                        |
-| `npm run format:check`     | Checks that all files match the Prettier format.                        |
-| `npm test`                 | Runs the unit tests.                                                    |
-| `npm run test:cov`         | Runs the unit tests with a coverage report.                             |
-| `npm run test:e2e`         | Runs the end-to-end tests in `test/`. They need DynamoDB Local running. |
-| `npm run db:create-tables` | Creates the DynamoDB tables that are missing.                           |
-| `npm run db:seed`          | Creates the demo user and the demo products that are missing.           |
+| Script                     | What it does                                                                      |
+| -------------------------- | --------------------------------------------------------------------------------- |
+| `npm run build`            | Compiles `src/` to `dist/`.                                                       |
+| `npm run start:dev`        | Starts the API and restarts it when a file changes.                               |
+| `npm run start:prod`       | Starts the compiled API from `dist/`.                                             |
+| `npm run typecheck`        | Runs the TypeScript compiler without output.                                      |
+| `npm run lint`             | Runs ESLint and reports problems.                                                 |
+| `npm run lint:fix`         | Runs ESLint and fixes what it can.                                                |
+| `npm run format`           | Formats all files with Prettier.                                                  |
+| `npm run format:check`     | Checks that all files match the Prettier format.                                  |
+| `npm test`                 | Runs the unit tests.                                                              |
+| `npm run test:cov`         | Runs the unit tests with a coverage report.                                       |
+| `npm run test:e2e`         | Runs the end-to-end tests in `test/`. They need DynamoDB Local and Redis running. |
+| `npm run db:create-tables` | Creates the DynamoDB tables that are missing.                                     |
+| `npm run db:seed`          | Creates the demo user and the demo products that are missing.                     |
 
 ## Git hooks
 

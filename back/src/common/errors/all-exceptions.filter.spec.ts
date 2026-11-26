@@ -67,6 +67,7 @@ describe('AllExceptionsFilter', () => {
       ['forbidden', HttpStatus.FORBIDDEN],
       ['not_found', HttpStatus.NOT_FOUND],
       ['conflict', HttpStatus.CONFLICT],
+      ['rate_limited', HttpStatus.TOO_MANY_REQUESTS],
     ])('maps the %s category to status %d', (category, status) => {
       filter.catch(new TestDomainError(category), host);
 

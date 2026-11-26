@@ -1,5 +1,5 @@
 export type ErrorCategory =
-  'invalid_input' | 'unauthenticated' | 'forbidden' | 'not_found' | 'conflict';
+  'invalid_input' | 'unauthenticated' | 'forbidden' | 'not_found' | 'conflict' | 'rate_limited';
 
 export interface DomainErrorOptions {
   /** The original error. It is logged and never sent to the client. */
