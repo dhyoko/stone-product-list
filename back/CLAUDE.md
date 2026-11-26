@@ -30,7 +30,7 @@ These choices are agreed with the user. Ask before you change one.
 - Pagination uses an opaque base64url cursor built from the DynamoDB `LastEvaluatedKey`, not page numbers. The API returns a 400 for a cursor that does not decode. The page size is 20 by default and 100 at most.
 - Rate limiting has two layers. In AWS, API Gateway and WAF set a global cap and a per-IP cap on login. In the app, `@nestjs/throttler` sets one cap per user from the JWT, for all routes together. A request with no user, such as a login, counts against a lower cap per IP. `/health` has no cap. The counters live in Redis, so all instances share them.
 - The API runs on Lambda behind an API Gateway REST API. A REST API is used because WAF does not attach to an HTTP API. In AWS, the Lambda runs in a VPC to reach ElastiCache, and the JWT secret comes from SSM.
-- The project runs locally with no AWS account. Docker Compose runs the local services: DynamoDB Local and Redis. The Terraform phase applies Terraform to a local AWS emulator. Pick the emulator with the user in that phase.
+- The project runs locally with no AWS account. Docker Compose runs the local services: DynamoDB Local and Redis. Terraform in `infra/` is checked with `terraform validate` only. No free emulator can apply it, as `infra/README.md` explains.
 
 ## Gotchas
 
@@ -42,7 +42,7 @@ These choices are agreed with the user. Ask before you change one.
 - The app connects to Redis at startup and fails to start when Redis is down.
 - Every Redis key starts with `REDIS_KEY_PREFIX`. `test/setup-env.ts` gives each e2e spec file its own prefix and raises the rate limits, so the specs do not block each other or the dev server. A spec that tests the limits sets its own `RATE_LIMIT_*` values before it builds the app, as `test/rate-limit.e2e-spec.ts` does.
 - Add each new env variable in three places: `src/config/env.schema.ts`, `AppConfig`, and `.env.example`.
-- Table key schemas live in `src/database/tables.ts`. Change a key there, and Terraform must match it.
+- Table key schemas live in `src/database/tables.ts`. Change a key there, and `infra/dynamodb.tf` must match it.
 - When `DYNAMODB_LOCAL_ENDPOINT` is set, the client sends placeholder credentials, because DynamoDB Local accepts any. Without it, the client uses the default AWS credential chain.
 - The app is on NestJS 11, which is CommonJS. Version 12 of `@nestjs/*` packages, such as `@nestjs/jwt` 12, is ESM-only and fails to load in Jest. Install the version that matches Nest 11.
 - `JWT_SECRET` has no default. `test/setup-env.ts` sets it for the e2e specs, and unit specs build their config with `buildTestConfig` from `src/config/testing/`.
