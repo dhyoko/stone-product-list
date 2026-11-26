@@ -43,3 +43,33 @@ variable "redis_node_type" {
   type        = string
   default     = "cache.t4g.micro"
 }
+
+variable "lambda_zip_path" {
+  description = "Path of the zip that `npm run package:lambda` builds in back/."
+  type        = string
+  default     = "../back/build/lambda.zip"
+}
+
+variable "lambda_memory_mb" {
+  description = "Memory of the API Lambda in MB. Lambda gives more CPU with more memory, and argon2 needs the CPU."
+  type        = number
+  default     = 1024
+}
+
+variable "log_retention_days" {
+  description = "Days that CloudWatch keeps the API Lambda logs."
+  type        = number
+  default     = 14
+}
+
+variable "api_rate_limit" {
+  description = "Requests per second that API Gateway accepts for the whole API, before the app limits run."
+  type        = number
+  default     = 100
+}
+
+variable "api_burst_limit" {
+  description = "Request burst that API Gateway accepts for the whole API."
+  type        = number
+  default     = 200
+}

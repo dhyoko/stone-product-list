@@ -15,5 +15,10 @@ output "jwt_secret_parameter_name" {
 
 output "redis_url" {
   description = "TLS URL of the Redis node that holds the rate limit counters."
-  value       = "rediss://${aws_elasticache_cluster.redis.cache_nodes[0].address}:${aws_elasticache_cluster.redis.port}"
+  value       = local.redis_url
+}
+
+output "api_url" {
+  description = "Base URL of the API stage, such as https://abc123.execute-api.us-east-1.amazonaws.com/v1."
+  value       = aws_api_gateway_stage.v1.invoke_url
 }

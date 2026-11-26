@@ -15,3 +15,7 @@ resource "aws_elasticache_cluster" "redis" {
   security_group_ids         = [aws_security_group.redis.id]
   transit_encryption_enabled = true
 }
+
+locals {
+  redis_url = "rediss://${aws_elasticache_cluster.redis.cache_nodes[0].address}:${aws_elasticache_cluster.redis.port}"
+}
