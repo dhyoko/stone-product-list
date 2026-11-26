@@ -31,3 +31,15 @@ variable "deletion_protection" {
   type        = bool
   default     = true
 }
+
+variable "vpc_cidr" {
+  description = "CIDR block of the VPC. Each private subnet takes a /24 from it."
+  type        = string
+  default     = "10.20.0.0/16"
+}
+
+variable "redis_node_type" {
+  description = "ElastiCache node type for the rate limit counters."
+  type        = string
+  default     = "cache.t4g.micro"
+}
