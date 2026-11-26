@@ -73,3 +73,14 @@ variable "api_burst_limit" {
   type        = number
   default     = 200
 }
+
+variable "waf_login_limit" {
+  description = "Login requests that one IP can send in 5 minutes before WAF blocks it."
+  type        = number
+  default     = 100
+
+  validation {
+    condition     = var.waf_login_limit >= 10
+    error_message = "waf_login_limit must be at least 10, the WAF minimum."
+  }
+}
