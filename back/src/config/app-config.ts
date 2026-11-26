@@ -11,6 +11,10 @@ export interface DynamoDbConfig {
   readonly tables: TableNames;
 }
 
+export interface RedisConfig {
+  readonly url: string;
+}
+
 export interface AuthConfig {
   readonly jwtSecret: string;
   readonly accessTokenTtlSeconds: number;
@@ -23,6 +27,7 @@ export class AppConfig {
   readonly nodeEnv: Env['NODE_ENV'];
   readonly http: { readonly port: number };
   readonly dynamoDb: DynamoDbConfig;
+  readonly redis: RedisConfig;
   readonly auth: AuthConfig;
 
   constructor(env: Env) {
@@ -33,6 +38,7 @@ export class AppConfig {
       localEndpoint: env.DYNAMODB_LOCAL_ENDPOINT,
       tables: { users: env.USERS_TABLE, products: env.PRODUCTS_TABLE },
     };
+    this.redis = { url: env.REDIS_URL };
     this.auth = {
       jwtSecret: env.JWT_SECRET,
       accessTokenTtlSeconds: env.ACCESS_TOKEN_TTL_SECONDS,

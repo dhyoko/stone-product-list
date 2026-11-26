@@ -28,6 +28,10 @@ jobs:
         image: amazon/dynamodb-local:3.3.2
         ports:
           - 8000:8000
+      redis:
+        image: redis:8.12.0-alpine
+        ports:
+          - 6379:6379
     defaults:
       run:
         working-directory: back

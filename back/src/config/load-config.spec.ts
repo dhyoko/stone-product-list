@@ -77,6 +77,21 @@ describe('loadConfig', () => {
     expect(() => loadConfig({ ...REQUIRED, USERS_TABLE: name })).toThrow(InvalidConfigError);
   });
 
+  it('defaults the Redis URL to the local Redis', () => {
+    expect(loadConfig(REQUIRED).redis).toEqual({ url: 'redis://localhost:6379' });
+  });
+
+  it.each(['redis://cache:6379', 'rediss://user:pass@cache.example.com:6380/0'])(
+    'reads a REDIS_URL of %p',
+    (url) => {
+      expect(loadConfig({ ...REQUIRED, REDIS_URL: url }).redis.url).toBe(url);
+    },
+  );
+
+  it.each(['localhost:6379', 'http://localhost:6379'])('rejects a REDIS_URL of %p', (url) => {
+    expect(() => loadConfig({ ...REQUIRED, REDIS_URL: url })).toThrow(InvalidConfigError);
+  });
+
   it('reads the auth values and defaults the token lifetime to 15 minutes', () => {
     expect(loadConfig(REQUIRED).auth).toEqual({
       jwtSecret: REQUIRED.JWT_SECRET,

@@ -9,6 +9,7 @@ export const envSchema = z.object({
   DYNAMODB_LOCAL_ENDPOINT: z.url().optional(),
   USERS_TABLE: tableName.default('product-api-users'),
   PRODUCTS_TABLE: tableName.default('product-api-products'),
+  REDIS_URL: z.url({ protocol: /^rediss?$/ }).default('redis://localhost:6379'),
   JWT_SECRET: z.string().min(32),
   ACCESS_TOKEN_TTL_SECONDS: z.coerce.number().int().min(60).max(86_400).default(900),
 });
