@@ -50,4 +50,6 @@ These choices are agreed with the user. Ask before you change one.
 - `src/lambda.ts` is the Lambda entry point. It reads `JWT_SECRET` from the SSM parameter named in `JWT_SECRET_SSM_PARAMETER` when `JWT_SECRET` is not set.
 - Do not set `trust proxy`. On Lambda, serverless-express sets `req.ip` from the API Gateway `sourceIp`. With `trust proxy`, `req.ip` comes from `X-Forwarded-For`, which a client can fake.
 - `@codegenie/serverless-express` 5 needs Node 24. Stay on 4.x while the project runs on Node 22.
+- `docs/openapi.json` at the repo root is generated. After you change a route or a DTO, run `npm run openapi:export` and commit the file. CI fails when the file does not match the code.
+- The export builds the app in Nest preview mode, which creates no providers, so it needs no Redis and no `JWT_SECRET`. Do not call `app.close()` on a preview app. The shutdown hooks run on providers that were never created.
 - A Docker build must install with `npm ci --ignore-scripts`. The `prepare` script needs `.git` and Husky.

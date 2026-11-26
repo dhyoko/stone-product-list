@@ -4,11 +4,13 @@ on:
   pull_request:
     paths:
       - "back/**"
+      - "docs/openapi.json"
       - ".github/workflows/back-ci.yml"
   push:
     branches: [master]
     paths:
       - "back/**"
+      - "docs/openapi.json"
       - ".github/workflows/back-ci.yml"
 
 permissions:
@@ -65,3 +67,8 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Check the OpenAPI spec is up to date
+        run: |
+          npm run openapi:export
+          git diff --exit-code -- ../docs/openapi.json

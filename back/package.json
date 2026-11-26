@@ -27,7 +27,8 @@
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.config.ts",
     "db:create-tables": "ts-node src/scripts/create-tables.ts",
-    "db:seed": "ts-node src/scripts/seed.ts"
+    "db:seed": "ts-node src/scripts/seed.ts",
+    "openapi:export": "ts-node src/scripts/export-openapi.ts"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.1177.0",

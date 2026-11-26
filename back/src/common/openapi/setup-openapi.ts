@@ -13,7 +13,11 @@ export function buildOpenApiConfig(): Omit<OpenAPIObject, 'paths'> {
     .build();
 }
 
+export function buildOpenApiDocument(app: INestApplication): OpenAPIObject {
+  return SwaggerModule.createDocument(app, buildOpenApiConfig());
+}
+
 export function setupOpenApi(app: INestApplication): void {
-  const document = SwaggerModule.createDocument(app, buildOpenApiConfig());
+  const document = buildOpenApiDocument(app);
   SwaggerModule.setup(OPENAPI_PATH, app, document, { jsonDocumentUrl: OPENAPI_JSON_PATH });
 }
