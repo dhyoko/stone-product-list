@@ -36,7 +36,7 @@ This is the back-end for the product listing challenge. It is a NestJS 11 API in
    npm run db:create-tables
    ```
 
-5. Create the demo user. The script skips a user that already exists:
+5. Create the demo user and 50 demo products. The script skips the ones that already exist:
 
    ```bash
    npm run db:seed
@@ -70,6 +70,7 @@ The API reads its settings from environment variables. `.env.example` lists each
 | `npm run test:cov`         | Runs the unit tests with a coverage report.                             |
 | `npm run test:e2e`         | Runs the end-to-end tests in `test/`. They need DynamoDB Local running. |
 | `npm run db:create-tables` | Creates the DynamoDB tables that are missing.                           |
+| `npm run db:seed`          | Creates the demo user and the demo products that are missing.           |
 
 ## Git hooks
 
