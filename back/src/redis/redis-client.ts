@@ -5,7 +5,7 @@ import type { RedisConfig } from '../config/app-config';
 const logger = new Logger('RedisClient');
 
 export function createRedisClient(config: RedisConfig): Redis {
-  const client = new Redis(config.url, { lazyConnect: true });
+  const client = new Redis(config.url, { lazyConnect: true, keyPrefix: config.keyPrefix });
   client.on('error', (error: NodeJS.ErrnoException) => {
     logger.warn(`Redis connection error: ${describeError(error)}`);
   });

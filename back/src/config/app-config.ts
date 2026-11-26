@@ -13,6 +13,7 @@ export interface DynamoDbConfig {
 
 export interface RedisConfig {
   readonly url: string;
+  readonly keyPrefix: string;
 }
 
 export interface AuthConfig {
@@ -45,7 +46,7 @@ export class AppConfig {
       localEndpoint: env.DYNAMODB_LOCAL_ENDPOINT,
       tables: { users: env.USERS_TABLE, products: env.PRODUCTS_TABLE },
     };
-    this.redis = { url: env.REDIS_URL };
+    this.redis = { url: env.REDIS_URL, keyPrefix: env.REDIS_KEY_PREFIX };
     this.auth = {
       jwtSecret: env.JWT_SECRET,
       accessTokenTtlSeconds: env.ACCESS_TOKEN_TTL_SECONDS,

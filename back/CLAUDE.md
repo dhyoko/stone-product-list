@@ -40,6 +40,7 @@ These choices are agreed with the user. Ask before you change one.
 - `npm run db:create-tables` skips a table that exists, so it does not add a new index to an old table. After you change a table in `src/database/tables.ts`, delete the local data with `docker compose down -v` and create the tables again.
 - Jest gives each test file its own copy of `process.env`. Code that writes env variables takes the target object as a parameter, as `loadEnvFile` does, so specs can pass a plain object.
 - The app connects to Redis at startup and fails to start when Redis is down.
+- Every Redis key starts with `REDIS_KEY_PREFIX`. `test/setup-env.ts` gives each e2e spec file its own prefix and raises the rate limits, so the specs do not block each other or the dev server. A spec that tests the limits sets its own `RATE_LIMIT_*` values before it builds the app, as `test/rate-limit.e2e-spec.ts` does.
 - Add each new env variable in three places: `src/config/env.schema.ts`, `AppConfig`, and `.env.example`.
 - Table key schemas live in `src/database/tables.ts`. Change a key there, and Terraform must match it.
 - When `DYNAMODB_LOCAL_ENDPOINT` is set, the client sends placeholder credentials, because DynamoDB Local accepts any. Without it, the client uses the default AWS credential chain.

@@ -56,6 +56,18 @@ The demo user logs in with the email `demo@example.com` and the `SEED_USER_PASSW
 
 The API reads its settings from environment variables. `.env.example` lists each variable with its default. A variable set in the shell wins over the value in `.env`. The API does not start when a variable is invalid, and the error names each invalid variable.
 
+## Rate limits
+
+The API limits how many requests a client sends in each window:
+
+- A request with a valid token counts against its user. One user can send 60 requests a minute across all routes.
+- A request without a user, such as a login, counts against its IP address. One IP can send 5 of these a minute.
+- `/health` has no limit.
+
+A request over the limit gets a 429 with the code `RATE_LIMIT_EXCEEDED`. The `Retry-After` header gives the seconds to wait. Each response under the limit has the `X-RateLimit-Limit`, `X-RateLimit-Remaining`, and `X-RateLimit-Reset` headers.
+
+Set `RATE_LIMIT_WINDOW_SECONDS`, `RATE_LIMIT_PER_USER`, and `RATE_LIMIT_PER_IP` to change the limits. The counters live in Redis, so they survive an API restart. To clear them, run `docker compose exec redis redis-cli flushall`.
+
 ## Scripts
 
 | Script                     | What it does                                                                      |

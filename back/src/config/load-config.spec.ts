@@ -77,8 +77,19 @@ describe('loadConfig', () => {
     expect(() => loadConfig({ ...REQUIRED, USERS_TABLE: name })).toThrow(InvalidConfigError);
   });
 
-  it('defaults the Redis URL to the local Redis', () => {
-    expect(loadConfig(REQUIRED).redis).toEqual({ url: 'redis://localhost:6379' });
+  it('defaults the Redis URL to the local Redis and prefixes keys with the app name', () => {
+    expect(loadConfig(REQUIRED).redis).toEqual({
+      url: 'redis://localhost:6379',
+      keyPrefix: 'product-api:',
+    });
+  });
+
+  it.each(['', 'e2e-1a2b3c4d:'])('reads a REDIS_KEY_PREFIX of %p', (prefix) => {
+    expect(loadConfig({ ...REQUIRED, REDIS_KEY_PREFIX: prefix }).redis.keyPrefix).toBe(prefix);
+  });
+
+  it.each(['has space', 'a'.repeat(65)])('rejects a REDIS_KEY_PREFIX of %p', (prefix) => {
+    expect(() => loadConfig({ ...REQUIRED, REDIS_KEY_PREFIX: prefix })).toThrow(InvalidConfigError);
   });
 
   it.each(['redis://cache:6379', 'rediss://user:pass@cache.example.com:6380/0'])(

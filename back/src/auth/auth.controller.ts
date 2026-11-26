@@ -11,6 +11,7 @@ import type { AuthenticatedUser } from '../common/auth/authenticated-request';
 import { CurrentUser } from '../common/auth/current-user.decorator';
 import { Public } from '../common/auth/public.decorator';
 import { ErrorResponseDto } from '../common/errors/error-response.dto';
+import { ApiRateLimitedResponse } from '../rate-limit/api-rate-limited-response.decorator';
 import { AuthService } from './auth.service';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { LoginDto } from './dto/login.dto';
@@ -31,6 +32,7 @@ export class AuthController {
     type: ErrorResponseDto,
     description: 'The email or password is wrong',
   })
+  @ApiRateLimitedResponse()
   async login(@Body() body: LoginDto): Promise<LoginResponseDto> {
     return new LoginResponseDto(await this.authService.login(body));
   }
@@ -43,6 +45,7 @@ export class AuthController {
     type: ErrorResponseDto,
     description: 'The access token is missing, expired, or not valid',
   })
+  @ApiRateLimitedResponse()
   async me(@CurrentUser() user: AuthenticatedUser): Promise<UserResponseDto> {
     return new UserResponseDto(await this.authService.getCurrentUser(user.id));
   }
