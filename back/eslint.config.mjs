@@ -7,7 +7,7 @@ import tseslint from 'typescript-eslint';
 
 export default defineConfig(
   {
-    ignores: ['dist/', 'coverage/', 'eslint.config.mjs', 'lint-staged.config.mjs'],
+    ignores: ['dist/', 'build/', 'coverage/', 'eslint.config.mjs', 'lint-staged.config.mjs'],
   },
   eslint.configs.recommended,
   tseslint.configs.strictTypeChecked,
