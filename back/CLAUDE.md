@@ -47,4 +47,7 @@ These choices are agreed with the user. Ask before you change one.
 - The app is on NestJS 11, which is CommonJS. Version 12 of `@nestjs/*` packages, such as `@nestjs/jwt` 12, is ESM-only and fails to load in Jest. Install the version that matches Nest 11.
 - `JWT_SECRET` has no default. `test/setup-env.ts` sets it for the e2e specs, and unit specs build their config with `buildTestConfig` from `src/config/testing/`.
 - `jest.config.ts` runs ts-jest with `isolatedModules: false`. With it on, the decorator metadata for each injected constructor parameter compiles to a branch that never runs, and branch coverage drops under the threshold.
+- `src/lambda.ts` is the Lambda entry point. It reads `JWT_SECRET` from the SSM parameter named in `JWT_SECRET_SSM_PARAMETER` when `JWT_SECRET` is not set.
+- Do not set `trust proxy`. On Lambda, serverless-express sets `req.ip` from the API Gateway `sourceIp`. With `trust proxy`, `req.ip` comes from `X-Forwarded-For`, which a client can fake.
+- `@codegenie/serverless-express` 5 needs Node 24. Stay on 4.x while the project runs on Node 22.
 - A Docker build must install with `npm ci --ignore-scripts`. The `prepare` script needs `.git` and Husky.
