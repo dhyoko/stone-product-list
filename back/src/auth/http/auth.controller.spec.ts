@@ -1,10 +1,10 @@
 import { Test } from '@nestjs/testing';
 import { plainToInstance } from 'class-transformer';
 import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
+import { AuthService } from '../application/auth.service';
 import { LoginDto } from './dto/login.dto';
-import { userIdSchema } from '../users/domain/user';
-import { InvalidCredentialsError } from './invalid-credentials.error';
+import { userIdSchema } from '../../users/domain/user';
+import { InvalidCredentialsError } from '../domain/invalid-credentials.error';
 
 describe('AuthController', () => {
   const authService = { login: jest.fn(), getCurrentUser: jest.fn() };

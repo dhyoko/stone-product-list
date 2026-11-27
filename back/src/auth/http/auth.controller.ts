@@ -7,12 +7,12 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import type { AuthenticatedUser } from '../common/auth/authenticated-request';
-import { CurrentUser } from '../common/auth/current-user.decorator';
-import { Public } from '../common/auth/public.decorator';
-import { ErrorResponseDto } from '../common/errors/error-response.dto';
-import { ApiRateLimitedResponse } from '../rate-limit/api-rate-limited-response.decorator';
-import { AuthService } from './auth.service';
+import type { AuthenticatedUser } from '../../common/auth/authenticated-request';
+import { CurrentUser } from '../../common/auth/current-user.decorator';
+import { Public } from '../../common/auth/public.decorator';
+import { ErrorResponseDto } from '../../common/errors/error-response.dto';
+import { ApiRateLimitedResponse } from '../../rate-limit/api-rate-limited-response.decorator';
+import { AuthService } from '../application/auth.service';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { LoginDto } from './dto/login.dto';
 import { UserResponseDto } from './dto/user-response.dto';

@@ -3,15 +3,15 @@ import { Reflector } from '@nestjs/core';
 import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
-import type { AuthenticatedRequest } from '../common/auth/authenticated-request';
-import { Public } from '../common/auth/public.decorator';
-import { AppConfig } from '../config/app-config';
-import { buildTestConfig } from '../config/testing/test-config';
-import { userIdSchema } from '../users/domain/user';
-import { InvalidTokenError } from './invalid-token.error';
+import type { AuthenticatedRequest } from '../../common/auth/authenticated-request';
+import { Public } from '../../common/auth/public.decorator';
+import { AppConfig } from '../../config/app-config';
+import { buildTestConfig } from '../../config/testing/test-config';
+import { userIdSchema } from '../../users/domain/user';
+import { InvalidTokenError } from '../domain/invalid-token.error';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { createJwtOptions } from './jwt-options';
-import { TokenService } from './token.service';
+import { createJwtOptions } from '../application/jwt-options';
+import { TokenService } from '../application/token.service';
 
 const USER_ID = userIdSchema.parse('7d0f5c1e-3b2a-4c8d-9e6f-1a2b3c4d5e6f');
 

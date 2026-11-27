@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { z } from 'zod';
-import { AppConfig } from '../config/app-config';
-import { type UserId, userIdSchema } from '../users/domain/user';
-import { InvalidTokenError } from './invalid-token.error';
+import { AppConfig } from '../../config/app-config';
+import { type UserId, userIdSchema } from '../../users/domain/user';
+import { InvalidTokenError } from '../domain/invalid-token.error';
 
 const tokenPayloadSchema = z.object({ sub: userIdSchema });
 

@@ -1,16 +1,16 @@
 import { JwtModule } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
-import { AppConfig } from '../config/app-config';
-import { buildTestConfig } from '../config/testing/test-config';
-import { PasswordHasher } from '../users/application/password-hasher';
-import { FakePasswordHasher } from '../users/testing/fake-password-hasher';
-import { InMemoryUsersRepository } from '../users/testing/in-memory-users.repository';
-import { userIdSchema } from '../users/domain/user';
-import { UsersRepository } from '../users/application/users.repository';
-import { UsersService } from '../users/application/users.service';
+import { AppConfig } from '../../config/app-config';
+import { buildTestConfig } from '../../config/testing/test-config';
+import { PasswordHasher } from '../../users/application/password-hasher';
+import { FakePasswordHasher } from '../../users/testing/fake-password-hasher';
+import { InMemoryUsersRepository } from '../../users/testing/in-memory-users.repository';
+import { userIdSchema } from '../../users/domain/user';
+import { UsersRepository } from '../../users/application/users.repository';
+import { UsersService } from '../../users/application/users.service';
 import { AuthService } from './auth.service';
-import { InvalidCredentialsError } from './invalid-credentials.error';
-import { InvalidTokenError } from './invalid-token.error';
+import { InvalidCredentialsError } from '../domain/invalid-credentials.error';
+import { InvalidTokenError } from '../domain/invalid-token.error';
 import { createJwtOptions } from './jwt-options';
 import { TokenService } from './token.service';
 

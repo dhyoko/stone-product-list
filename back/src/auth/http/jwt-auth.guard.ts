@@ -1,9 +1,9 @@
 import { type CanActivate, type ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import type { AuthenticatedRequest } from '../common/auth/authenticated-request';
-import { IS_PUBLIC_KEY } from '../common/auth/public.decorator';
-import { InvalidTokenError } from './invalid-token.error';
-import { TokenService } from './token.service';
+import type { AuthenticatedRequest } from '../../common/auth/authenticated-request';
+import { IS_PUBLIC_KEY } from '../../common/auth/public.decorator';
+import { InvalidTokenError } from '../domain/invalid-token.error';
+import { TokenService } from '../application/token.service';
 
 const BEARER_PATTERN = /^Bearer (?<token>\S+)$/i;
 

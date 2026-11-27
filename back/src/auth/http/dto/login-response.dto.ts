@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import type { AccessToken } from '../token.service';
+import type { AccessToken } from '../../application/token.service';
 
 export class LoginResponseDto {
   @ApiProperty({ example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' })

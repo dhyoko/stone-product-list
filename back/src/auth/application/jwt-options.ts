@@ -1,5 +1,5 @@
 import type { JwtModuleOptions } from '@nestjs/jwt';
-import type { AppConfig } from '../config/app-config';
+import type { AppConfig } from '../../config/app-config';
 
 export function createJwtOptions(config: AppConfig): JwtModuleOptions {
   return {

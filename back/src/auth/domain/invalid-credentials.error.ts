@@ -1,4 +1,4 @@
-import { DomainError } from '../common/errors/domain-error';
+import { DomainError } from '../../common/errors/domain-error';
 
 export class InvalidCredentialsError extends DomainError {
   readonly code = 'AUTH_INVALID_CREDENTIALS';

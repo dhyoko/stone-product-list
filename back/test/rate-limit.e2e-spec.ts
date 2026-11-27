@@ -4,7 +4,7 @@ import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import type { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
-import { TokenService } from '../src/auth/token.service';
+import { TokenService } from '../src/auth/application/token.service';
 import { AppConfig } from '../src/config/app-config';
 import { Argon2PasswordHasher } from '../src/users/infrastructure/argon2-password-hasher';
 import { seedUsers } from '../src/users/seed/seed-users';
