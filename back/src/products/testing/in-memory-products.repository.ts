@@ -1,6 +1,6 @@
-import type { Product, ProductPosition, ProductSlice } from '../product';
-import { ProductAlreadyExistsError } from '../product-already-exists.error';
-import { ProductsRepository } from '../products.repository';
+import type { Product, ProductPosition, ProductSlice } from '../domain/product';
+import { ProductAlreadyExistsError } from '../domain/product-already-exists.error';
+import { ProductsRepository } from '../application/products.repository';
 
 function sortKeyOf({ id, createdAt }: ProductPosition): string {
   return `${createdAt.toISOString()}#${id}`;

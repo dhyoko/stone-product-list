@@ -1,4 +1,4 @@
-import { PasswordHasher } from '../password-hasher';
+import { PasswordHasher } from '../application/password-hasher';
 
 export class FakePasswordHasher extends PasswordHasher {
   hash(password: string): Promise<string> {

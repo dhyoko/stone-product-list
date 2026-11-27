@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { DynamoProductsRepository } from './dynamo-products.repository';
-import { ProductsController } from './products.controller';
-import { ProductsRepository } from './products.repository';
-import { ProductsService } from './products.service';
+import { DynamoProductsRepository } from './infrastructure/dynamo-products.repository';
+import { ProductsController } from './http/products.controller';
+import { ProductsRepository } from './application/products.repository';
+import { ProductsService } from './application/products.service';
 
 @Module({
   controllers: [ProductsController],

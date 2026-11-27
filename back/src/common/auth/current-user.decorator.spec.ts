@@ -1,5 +1,5 @@
 import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
-import { userIdSchema } from '../../users/user';
+import { userIdSchema } from '../../users/domain/user';
 import { readCurrentUser } from './current-user.decorator';
 
 describe('readCurrentUser', () => {

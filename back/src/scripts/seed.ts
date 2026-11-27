@@ -2,12 +2,12 @@ import { Logger } from '@nestjs/common';
 import { loadConfig, loadEnvFile } from '../config/load-config';
 import { loadSeedConfig } from '../config/seed-config';
 import { createDocumentClient, createDynamoDbClient } from '../database/dynamodb-clients';
-import { buildDemoProducts } from '../products/demo-products';
-import { DynamoProductsRepository } from '../products/dynamo-products.repository';
-import { seedProducts } from '../products/seed-products';
-import { Argon2PasswordHasher } from '../users/argon2-password-hasher';
-import { DynamoUsersRepository } from '../users/dynamo-users.repository';
-import { seedUsers } from '../users/seed-users';
+import { buildDemoProducts } from '../products/seed/demo-products';
+import { DynamoProductsRepository } from '../products/infrastructure/dynamo-products.repository';
+import { seedProducts } from '../products/seed/seed-products';
+import { Argon2PasswordHasher } from '../users/infrastructure/argon2-password-hasher';
+import { DynamoUsersRepository } from '../users/infrastructure/dynamo-users.repository';
+import { seedUsers } from '../users/seed/seed-users';
 
 const logger = new Logger('Seed');
 

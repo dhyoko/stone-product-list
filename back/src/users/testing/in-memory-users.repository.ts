@@ -1,6 +1,6 @@
-import type { StoredUser, UserId } from '../user';
-import { UserAlreadyExistsError } from '../user-already-exists.error';
-import { UsersRepository } from '../users.repository';
+import type { StoredUser, UserId } from '../domain/user';
+import { UserAlreadyExistsError } from '../domain/user-already-exists.error';
+import { UsersRepository } from '../application/users.repository';
 
 export class InMemoryUsersRepository extends UsersRepository {
   readonly users = new Map<string, StoredUser>();

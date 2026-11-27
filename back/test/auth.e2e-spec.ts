@@ -6,9 +6,9 @@ import request from 'supertest';
 import type { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
 import { AppConfig } from '../src/config/app-config';
-import { Argon2PasswordHasher } from '../src/users/argon2-password-hasher';
-import { seedUsers } from '../src/users/seed-users';
-import { UsersRepository } from '../src/users/users.repository';
+import { Argon2PasswordHasher } from '../src/users/infrastructure/argon2-password-hasher';
+import { seedUsers } from '../src/users/seed/seed-users';
+import { UsersRepository } from '../src/users/application/users.repository';
 import { logIn, loginResponseSchema } from './support/log-in';
 import { createTestTables, deleteTestTables } from './support/test-tables';
 
