@@ -7,11 +7,11 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { ErrorResponseDto } from '../common/errors/error-response.dto';
-import { ApiRateLimitedResponse } from '../rate-limit/api-rate-limited-response.decorator';
+import { ErrorResponseDto } from '../../common/errors/error-response.dto';
+import { ApiRateLimitedResponse } from '../../rate-limit/api-rate-limited-response.decorator';
 import { ListProductsQueryDto } from './dto/list-products-query.dto';
 import { ProductPageResponseDto } from './dto/product-page-response.dto';
-import { ProductsService } from './products.service';
+import { ProductsService } from '../application/products.service';
 
 @ApiTags('products')
 @ApiBearerAuth()

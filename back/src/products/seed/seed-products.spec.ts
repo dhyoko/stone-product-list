@@ -1,6 +1,6 @@
 import { buildDemoProducts } from './demo-products';
 import { seedProducts } from './seed-products';
-import { InMemoryProductsRepository } from './testing/in-memory-products.repository';
+import { InMemoryProductsRepository } from '../testing/in-memory-products.repository';
 
 describe('seedProducts', () => {
   const products = buildDemoProducts().slice(0, 3);

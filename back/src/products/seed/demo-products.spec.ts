@@ -1,5 +1,5 @@
 import { buildDemoProducts } from './demo-products';
-import { productIdSchema } from './product';
+import { productIdSchema } from '../domain/product';
 
 describe('buildDemoProducts', () => {
   const products = buildDemoProducts();

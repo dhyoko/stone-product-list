@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { type Product, productIdSchema, type ProductId } from './product';
+import { type Product, productIdSchema, type ProductId } from '../domain/product';
 
 const FIRST_CREATED_AT = Date.UTC(2026, 0, 1);
 const HOUR_IN_MS = 3_600_000;

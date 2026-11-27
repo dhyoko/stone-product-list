@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import type { Product } from '../product';
+import type { Product } from '../../domain/product';
 
 export class ProductResponseDto {
   @ApiProperty({ format: 'uuid', example: '2b1e4c7a-8d3f-4a6b-9c2e-5f7a1b3c4d5e' })

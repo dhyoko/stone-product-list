@@ -1,4 +1,4 @@
-import type { Product, ProductPosition, ProductSlice } from './product';
+import type { Product, ProductPosition, ProductSlice } from '../domain/product';
 
 export abstract class ProductsRepository {
   abstract listNewestFirst(input: {

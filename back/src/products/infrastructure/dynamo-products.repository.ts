@@ -2,11 +2,16 @@ import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
-import { AppConfig } from '../config/app-config';
-import { PRODUCTS_BY_CREATED_AT_INDEX } from '../database/tables';
-import { type Product, productIdSchema, type ProductPosition, type ProductSlice } from './product';
-import { ProductAlreadyExistsError } from './product-already-exists.error';
-import { ProductsRepository } from './products.repository';
+import { AppConfig } from '../../config/app-config';
+import { PRODUCTS_BY_CREATED_AT_INDEX } from '../../database/tables';
+import {
+  type Product,
+  productIdSchema,
+  type ProductPosition,
+  type ProductSlice,
+} from '../domain/product';
+import { ProductAlreadyExistsError } from '../domain/product-already-exists.error';
+import { ProductsRepository } from '../application/products.repository';
 
 const PRODUCT_LIST_KEY = 'PRODUCT';
 

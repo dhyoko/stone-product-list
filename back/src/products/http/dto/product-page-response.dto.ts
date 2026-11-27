@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import type { ProductPage } from '../products.service';
+import type { ProductPage } from '../../application/products.service';
 import { ProductResponseDto } from './product-response.dto';
 
 export class ProductPageResponseDto {

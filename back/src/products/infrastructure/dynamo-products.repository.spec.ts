@@ -3,11 +3,11 @@ import { DynamoDBDocumentClient, PutCommand, QueryCommand } from '@aws-sdk/lib-d
 import { Test } from '@nestjs/testing';
 import { mockClient } from 'aws-sdk-client-mock';
 import { ZodError } from 'zod';
-import { AppConfig } from '../config/app-config';
-import { buildTestConfig } from '../config/testing/test-config';
+import { AppConfig } from '../../config/app-config';
+import { buildTestConfig } from '../../config/testing/test-config';
 import { DynamoProductsRepository } from './dynamo-products.repository';
-import { type Product, productIdSchema } from './product';
-import { ProductAlreadyExistsError } from './product-already-exists.error';
+import { type Product, productIdSchema } from '../domain/product';
+import { ProductAlreadyExistsError } from '../domain/product-already-exists.error';
 
 const product: Product = {
   id: productIdSchema.parse('2b1e4c7a-8d3f-4a6b-9c2e-5f7a1b3c4d5e'),

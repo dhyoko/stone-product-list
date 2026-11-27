@@ -1,9 +1,9 @@
 import { Test } from '@nestjs/testing';
 import { plainToInstance } from 'class-transformer';
-import { buildDemoProducts } from './demo-products';
+import { buildDemoProducts } from '../seed/demo-products';
 import { ListProductsQueryDto } from './dto/list-products-query.dto';
 import { ProductsController } from './products.controller';
-import { ProductsService } from './products.service';
+import { ProductsService } from '../application/products.service';
 
 describe('ProductsController', () => {
   const productsService = { list: jest.fn() };

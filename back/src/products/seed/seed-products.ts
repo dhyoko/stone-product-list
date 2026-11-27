@@ -1,6 +1,6 @@
-import type { Product } from './product';
-import { ProductAlreadyExistsError } from './product-already-exists.error';
-import type { ProductsRepository } from './products.repository';
+import type { Product } from '../domain/product';
+import { ProductAlreadyExistsError } from '../domain/product-already-exists.error';
+import type { ProductsRepository } from '../application/products.repository';
 
 export interface ProductSeedSummary {
   readonly created: number;

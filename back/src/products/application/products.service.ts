@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import type { Product } from './product';
-import { decodeCursor, encodeCursor } from './product-cursor';
+import type { Product } from '../domain/product';
+import { decodeCursor, encodeCursor } from '../domain/product-cursor';
 import { ProductsRepository } from './products.repository';
 
 export interface ProductPage {

@@ -1,11 +1,11 @@
 import { Test } from '@nestjs/testing';
-import { buildDemoProducts } from './demo-products';
-import { InvalidCursorError } from './invalid-cursor.error';
-import type { Product } from './product';
-import { decodeCursor } from './product-cursor';
+import { buildDemoProducts } from '../seed/demo-products';
+import { InvalidCursorError } from '../domain/invalid-cursor.error';
+import type { Product } from '../domain/product';
+import { decodeCursor } from '../domain/product-cursor';
 import { ProductsRepository } from './products.repository';
 import { ProductsService } from './products.service';
-import { InMemoryProductsRepository } from './testing/in-memory-products.repository';
+import { InMemoryProductsRepository } from '../testing/in-memory-products.repository';
 
 describe('ProductsService', () => {
   const products = buildDemoProducts().slice(0, 5);
