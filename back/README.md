@@ -86,6 +86,7 @@ Set `RATE_LIMIT_WINDOW_SECONDS`, `RATE_LIMIT_PER_USER`, and `RATE_LIMIT_PER_IP` 
 | `npm run test:e2e`         | Runs the end-to-end tests in `test/`. They need DynamoDB Local and Redis running.   |
 | `npm run db:create-tables` | Creates the DynamoDB tables that are missing.                                       |
 | `npm run db:seed`          | Creates the demo user and the demo products that are missing.                       |
+| `npm run openapi:export`   | Writes the OpenAPI spec to `../docs/openapi.json`.                                  |
 
 ## Git hooks
 
