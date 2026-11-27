@@ -84,3 +84,14 @@ variable "waf_login_limit" {
     error_message = "waf_login_limit must be at least 10, the WAF minimum."
   }
 }
+
+variable "cors_origins" {
+  description = "Browser origins that may call the API, such as the front-end URL. An empty list turns CORS off."
+  type        = list(string)
+  default     = []
+
+  validation {
+    condition     = alltrue([for origin in var.cors_origins : can(regex("^https?://[^/]+$", origin))])
+    error_message = "Each CORS origin must be a scheme and a host, such as https://app.example.com, with no path."
+  }
+}

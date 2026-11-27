@@ -27,6 +27,7 @@ resource "aws_lambda_function" "api" {
       REDIS_URL                = local.redis_url
       REDIS_KEY_PREFIX         = "${local.name}:"
       JWT_SECRET_SSM_PARAMETER = aws_ssm_parameter.jwt_secret.name
+      CORS_ORIGINS             = join(",", var.cors_origins)
     }
   }
 

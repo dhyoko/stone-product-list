@@ -68,6 +68,12 @@ A request over the limit gets a 429 with the code `RATE_LIMIT_EXCEEDED`. The `Re
 
 Set `RATE_LIMIT_WINDOW_SECONDS`, `RATE_LIMIT_PER_USER`, and `RATE_LIMIT_PER_IP` to change the limits. The counters live in Redis, so they survive an API restart. To clear them, run `docker compose exec redis redis-cli flushall`.
 
+## CORS
+
+The API accepts browser requests only from the origins in `CORS_ORIGINS`, a comma-separated list. `.env.example` allows `http://localhost:5173`, the front-end dev server. When `CORS_ORIGINS` is empty, the API sends no CORS headers, and browsers on other origins cannot call it.
+
+A browser can read the `Retry-After` and `X-RateLimit-*` headers from an allowed origin.
+
 ## Scripts
 
 | Script                     | What it does                                                                        |

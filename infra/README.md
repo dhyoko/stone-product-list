@@ -65,6 +65,7 @@ The tables start empty. To create the demo user and products, run `npm run db:se
 | `api_rate_limit`      | `100`                      | Requests per second that API Gateway accepts for the whole API. |
 | `api_burst_limit`     | `200`                      | Request burst that API Gateway accepts for the whole API.       |
 | `waf_login_limit`     | `100`                      | Logins that one IP can send in 5 minutes before WAF blocks it.  |
+| `cors_origins`        | `[]`                       | Browser origins that may call the API. Empty turns CORS off.    |
 
 ## Checks
 

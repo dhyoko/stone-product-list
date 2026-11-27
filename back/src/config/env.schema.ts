@@ -2,9 +2,25 @@ import { z } from 'zod';
 
 const tableName = z.string().regex(/^[a-zA-Z0-9_.-]{3,255}$/);
 
+const origin = z.url({ protocol: /^https?$/ }).refine((value) => new URL(value).origin === value, {
+  error: 'Use an origin with no path or trailing slash, such as http://localhost:5173',
+});
+
+const originList = z
+  .string()
+  .default('')
+  .transform((value) =>
+    value
+      .split(',')
+      .map((item) => item.trim())
+      .filter((item) => item !== ''),
+  )
+  .pipe(z.array(origin));
+
 export const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().min(1).max(65_535).default(3000),
+  CORS_ORIGINS: originList,
   AWS_REGION: z.string().min(1).default('us-east-1'),
   DYNAMODB_LOCAL_ENDPOINT: z.url().optional(),
   USERS_TABLE: tableName.default('product-api-users'),

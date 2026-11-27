@@ -30,6 +30,7 @@ These choices are agreed with the user. Ask before you change one.
 - Pagination uses an opaque base64url cursor built from the DynamoDB `LastEvaluatedKey`, not page numbers. The API returns a 400 for a cursor that does not decode. The page size is 20 by default and 100 at most.
 - Rate limiting has two layers. In AWS, API Gateway and WAF set a global cap and a per-IP cap on login. In the app, `@nestjs/throttler` sets one cap per user from the JWT, for all routes together. A request with no user, such as a login, counts against a lower cap per IP. `/health` has no cap. The counters live in Redis, so all instances share them.
 - The API runs on Lambda behind an API Gateway REST API. A REST API is used because WAF does not attach to an HTTP API. In AWS, the Lambda runs in a VPC to reach ElastiCache, and the JWT secret comes from SSM.
+- The front-end calls the API directly, so the API turns on CORS for the origins in `CORS_ORIGINS`. It is off when the list is empty. In AWS, Terraform sets the list from `var.cors_origins`.
 - The project runs locally with no AWS account. Docker Compose runs the local services: DynamoDB Local and Redis. Terraform in `infra/` is checked with `terraform validate` only. No free emulator can apply it, as `infra/README.md` explains.
 
 ## Gotchas
