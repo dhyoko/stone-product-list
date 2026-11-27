@@ -12,6 +12,8 @@ import { Navigate, useLocation, useNavigate } from 'react-router';
 import { z } from 'zod';
 import { isApiError } from '../api/api-error';
 import { logIn } from '../api/auth-api';
+import { AppFooter } from '../layout/AppFooter';
+import { PageLayout } from '../layout/PageLayout';
 import { useSession } from '../session/session-context';
 import {
   describeLoginError,
@@ -21,6 +23,8 @@ import {
   retryWaitSeconds,
   validateLogin,
 } from './login-form';
+import { DemoAccount } from './DemoAccount';
+import { PasswordField } from './PasswordField';
 
 const DEFAULT_REDIRECT = '/products';
 
@@ -77,58 +81,60 @@ export function LoginPage(): React.JSX.Element {
   const isLocked = lockedUntil !== null;
 
   return (
-    <Container maxWidth="xs" sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
-      <Paper elevation={2} sx={{ p: 4, width: '100%' }}>
-        <Box component="form" noValidate onSubmit={handleSubmit}>
-          <Stack spacing={3}>
-            <Box>
-              <Typography variant="h5" component="h1">
+    <PageLayout
+      footer={
+        <AppFooter>
+          <DemoAccount />
+        </AppFooter>
+      }
+    >
+      <Container maxWidth="xs" sx={{ flex: 1, display: 'flex', alignItems: 'center', py: 4 }}>
+        <Paper elevation={2} sx={{ p: 4, width: '100%' }}>
+          <Box component="form" noValidate onSubmit={handleSubmit}>
+            <Stack spacing={3}>
+              <Box>
+                <Typography variant="h5" component="h1">
+                  Log in
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Log in to see the product list.
+                </Typography>
+              </Box>
+              {login.isError && <Alert severity="error">{describeLoginError(login.error)}</Alert>}
+              <TextField
+                label="Email"
+                type="email"
+                autoComplete="email"
+                autoFocus
+                required
+                fullWidth
+                value={values.email}
+                onChange={(event) => {
+                  setValues((current) => ({ ...current, email: event.target.value }));
+                }}
+                error={fieldErrors.email !== undefined}
+                helperText={fieldErrors.email}
+              />
+              <PasswordField
+                value={values.password}
+                onChange={(password) => {
+                  setValues((current) => ({ ...current, password }));
+                }}
+                error={fieldErrors.password}
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                loading={login.isPending}
+                disabled={isLocked}
+              >
                 Log in
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Log in to see the product list.
-              </Typography>
-            </Box>
-            {login.isError && <Alert severity="error">{describeLoginError(login.error)}</Alert>}
-            <TextField
-              label="Email"
-              type="email"
-              autoComplete="email"
-              autoFocus
-              required
-              fullWidth
-              value={values.email}
-              onChange={(event) => {
-                setValues((current) => ({ ...current, email: event.target.value }));
-              }}
-              error={fieldErrors.email !== undefined}
-              helperText={fieldErrors.email}
-            />
-            <TextField
-              label="Password"
-              type="password"
-              autoComplete="current-password"
-              required
-              fullWidth
-              value={values.password}
-              onChange={(event) => {
-                setValues((current) => ({ ...current, password: event.target.value }));
-              }}
-              error={fieldErrors.password !== undefined}
-              helperText={fieldErrors.password}
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              size="large"
-              loading={login.isPending}
-              disabled={isLocked}
-            >
-              Log in
-            </Button>
-          </Stack>
-        </Box>
-      </Paper>
-    </Container>
+              </Button>
+            </Stack>
+          </Box>
+        </Paper>
+      </Container>
+    </PageLayout>
   );
 }

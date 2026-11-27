@@ -7,6 +7,8 @@ import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { describeApiError } from '../api/describe-api-error';
+import { AppFooter } from '../layout/AppFooter';
+import { PageLayout } from '../layout/PageLayout';
 import { ProductCard } from './ProductCard';
 import { ProductsHeader } from './ProductsHeader';
 import { PRODUCTS_PAGE_SIZE, useProducts } from './use-products';
@@ -15,15 +17,14 @@ const CARD_SIZE = { xs: 12, sm: 6, md: 4 };
 
 export function ProductsPage(): React.JSX.Element {
   return (
-    <>
-      <ProductsHeader />
+    <PageLayout header={<ProductsHeader />} footer={<AppFooter />}>
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Products
         </Typography>
         <ProductList />
       </Container>
-    </>
+    </PageLayout>
   );
 }
 
