@@ -17,7 +17,7 @@ These choices are agreed with the user. Ask before you change one.
 - npm is the package manager.
 - The UI uses MUI. React Router handles the pages, and TanStack Query fetches and caches the API data.
 - The app has no tests. It only consumes the API, and the API has the test suite.
-- In development, Vite proxies `/api` to the local API, so the API needs no CORS. The app is not hosted on AWS.
+- The app calls the API at `VITE_API_URL`, `http://localhost:3000` by default. The API allows the app's origin through its `CORS_ORIGINS` setting. The app is not hosted on AWS.
 - ESLint runs `typescript-eslint` with `strictTypeChecked`, the same as `back/`, plus the React Hooks rules.
 
 ## Gotchas

@@ -15,7 +15,15 @@ This is the web client for the Product API. It is a React app in TypeScript, bui
    npm install
    ```
 
-2. Start the dev server:
+2. The app calls the API at `http://localhost:3000`. To use another URL, copy the example file and set `VITE_API_URL`:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   The API must allow this app's origin. Its `CORS_ORIGINS` setting in `back/.env` lists `http://localhost:5173` by default.
+
+3. Start the dev server:
 
    ```bash
    npm run dev
