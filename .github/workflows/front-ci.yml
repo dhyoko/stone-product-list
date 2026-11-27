@@ -1,0 +1,50 @@
+name: Front-end CI
+
+on:
+  pull_request:
+    paths:
+      - "front/**"
+      - ".github/workflows/front-ci.yml"
+  push:
+    branches: [master]
+    paths:
+      - "front/**"
+      - ".github/workflows/front-ci.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: front-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Lint, type check, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: front
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: front/.nvmrc
+          cache: npm
+          cache-dependency-path: front/package-lock.json
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build

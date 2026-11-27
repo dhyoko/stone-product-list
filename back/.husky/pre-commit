@@ -1,2 +1,8 @@
 cd back
 npx lint-staged
+cd ../front
+if [ ! -d node_modules ]; then
+  echo "front/node_modules is missing. Run npm install in front/, then commit again."
+  exit 1
+fi
+npx lint-staged

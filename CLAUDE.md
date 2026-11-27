@@ -18,7 +18,7 @@ The reviewers grade code organization, market-standard patterns, test coverage, 
 
 - `back/` is the API. It is a standalone npm project with its own `CLAUDE.md`.
 - `infra/` is the Terraform for AWS. Its `README.md` lists what it creates and how to check it.
-- `front/` is the front-end. It is a separate project, started after the back-end is done.
+- `front/` is the web client. It is a standalone npm project with its own `CLAUDE.md`.
 
 The repo root has no `package.json`. Run npm commands inside the project folder.
 
