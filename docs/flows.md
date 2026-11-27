@@ -44,7 +44,7 @@ sequenceDiagram
         Auth-->>Client: 401 AUTH_INVALID_CREDENTIALS
     else The password matches
         Auth->>Auth: Sign an HS256 JWT for the user ID, valid for 15 minutes
-        Auth-->>Client: 200 with accessToken and expiresInSeconds
+        Auth-->>Client: 200 with accessToken, tokenType, and expiresIn
     end
 ```
 

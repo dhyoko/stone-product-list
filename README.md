@@ -2,7 +2,7 @@
 
 This is an API where users log in with a JWT and read a paginated, rate-limited product list. It is a take-home challenge for Stone.
 
-The API is NestJS 11 on Node.js 22 and TypeScript. It stores users and products in DynamoDB and keeps the rate limit counters in Redis. Terraform describes how it runs on AWS: a Lambda behind API Gateway and WAF.
+The API is NestJS 11 on Node.js 22 and TypeScript. It stores users and products in DynamoDB and keeps the rate limit counters in Redis. Terraform describes how it runs on AWS: a Lambda behind API Gateway and WAF. A React web client in `front/` logs in and pages through the products.
 
 ## Repository layout
 
@@ -11,7 +11,7 @@ The API is NestJS 11 on Node.js 22 and TypeScript. It stores users and products 
 | `back/`  | The API. Read [back/README.md](back/README.md) for the setup, the scripts, and the rate limits.       |
 | `infra/` | The Terraform for AWS. Read [infra/README.md](infra/README.md) for what it creates and how to deploy. |
 | `docs/`  | The [OpenAPI spec](docs/openapi.json) and the [request flow diagrams](docs/flows.md).                 |
-| `front/` | The front-end. It is not built yet.                                                                   |
+| `front/` | The web client. Read [front/README.md](front/README.md) for the setup and the settings.               |
 
 Each project has its own `package.json`. Run npm commands inside the project folder, not at the repo root.
 
@@ -45,6 +45,17 @@ Run these commands in `back/`:
    ```
 
 The API listens on `http://localhost:3000`. The Swagger UI is at `http://localhost:3000/docs`. If port 6379 is in use, [back/README.md](back/README.md) explains how to move Redis to another port.
+
+## Run the web app
+
+With the API running, run these commands in `front/`:
+
+```bash
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173`. The login page shows the demo email and password with copy buttons. The API allows this origin through `CORS_ORIGINS` in `back/.env`.
 
 ## Try the API
 
@@ -102,7 +113,19 @@ Run the full check list in `back/`. The end-to-end tests need `docker compose up
 npm run lint && npm run format:check && npm run typecheck && npm run test:cov && npm run test:e2e && npm run build
 ```
 
-GitHub Actions runs these checks on each pull request that changes `back/`. The same workflow fails when `docs/openapi.json` does not match the code. A second workflow runs `terraform fmt` and `terraform validate` on each pull request that changes `infra/`.
+The web client has no tests. Run its checks in `front/`:
+
+```bash
+npm run lint && npm run format:check && npm run typecheck && npm run build
+```
+
+GitHub Actions runs one workflow for each project, on each pull request that changes it:
+
+- The back-end workflow runs the back-end checks. It also fails when `docs/openapi.json` does not match the code.
+- The front-end workflow runs the front-end checks.
+- The infra workflow runs `terraform fmt` and `terraform validate`.
+
+The git hooks in `back/.husky` check both `back/` and `front/` on commit and on push.
 
 ## Deploy to AWS
 

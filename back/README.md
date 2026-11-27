@@ -100,6 +100,7 @@ A browser can read the `Retry-After` and `X-RateLimit-*` headers from an allowed
 
 - `pre-commit` runs ESLint and Prettier on the staged files in `back/`. When a staged file is a `.ts` file, it also runs `tsc --noEmit` on the whole project.
 - `pre-push` runs `npm run test:cov`. The push fails when a test fails or coverage is below the threshold.
+- Both hooks also check `front/`, so run `npm install` in `front/` too. A hook fails when `front/node_modules` is missing. `front/README.md` lists those checks.
 
 When a hook fails, run `npm run lint:fix` or `npm run format`, stage the changes, and commit again.
 

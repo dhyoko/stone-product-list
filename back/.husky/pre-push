@@ -1,2 +1,9 @@
 cd back
 npm run test:cov
+cd ../front
+if [ ! -d node_modules ]; then
+  echo "front/node_modules is missing. Run npm install in front/, then push again."
+  exit 1
+fi
+npm run lint
+npm run build
