@@ -6,7 +6,7 @@ ESLint and Prettier enforce formatting and most syntax rules. This guide covers 
 
 ## Project layout
 
-Group code by feature. Each feature is one Nest module with its own folder.
+Group code by feature. Each feature is one Nest module with its own folder. Inside a feature, group the files by layer. Each spec sits next to the file it tests.
 
 ```text
 back/
@@ -15,25 +15,31 @@ back/
     app.module.ts            # imports feature modules
     config/                  # env schema and typed config
     common/                  # errors, filters, guards, decorators shared by features
-    auth/
-      auth.module.ts
-      auth.controller.ts
-      auth.service.ts
-      dto/
-      *.spec.ts
-    users/
-      users.module.ts
-      users.service.ts
-      user.ts                # domain type
-      users.repository.ts    # abstract class, the DI token
-      dynamo-users.repository.ts
-      *.spec.ts
     products/
+      products.module.ts
+      domain/                # domain types and errors
+        product.ts
+      application/           # services and repository ports
+        products.service.ts
+        products.repository.ts   # abstract class, the DI token
+      infrastructure/        # adapters that implement the ports
+        dynamo-products.repository.ts
+      http/                  # controllers, guards, and DTOs
+        products.controller.ts
+        dto/
+      seed/                  # demo data for the seed script
+      testing/               # fakes of the ports for specs
+    users/
+      ...
+    auth/
       ...
   test/                      # e2e specs only
   docs/
 ```
 
+- Create only the layer folders that a feature needs. `users/` has no `http/`, because it has no routes.
+- Keep a small feature with no layers flat, such as `health/` and `rate-limit/`.
+- Import across layers in one direction: `http/` and `infrastructure/` import from `application/` and `domain/`, `application/` imports from `domain/`, and `domain/` imports from neither.
 - Put a file in `common/` only when two or more features use it.
 - Keep `main.ts` to bootstrap: create the app, set global options, listen.
 - Do not create barrel `index.ts` files. Import from the file that owns the symbol.
