@@ -21,6 +21,11 @@ export interface AuthConfig {
   readonly accessTokenTtlSeconds: number;
 }
 
+export interface HttpConfig {
+  readonly port: number;
+  readonly corsOrigins: readonly string[];
+}
+
 export interface RateLimitConfig {
   readonly windowSeconds: number;
   readonly perUser: number;
@@ -32,7 +37,7 @@ export interface RateLimitConfig {
  */
 export class AppConfig {
   readonly nodeEnv: Env['NODE_ENV'];
-  readonly http: { readonly port: number };
+  readonly http: HttpConfig;
   readonly dynamoDb: DynamoDbConfig;
   readonly redis: RedisConfig;
   readonly auth: AuthConfig;
@@ -40,7 +45,7 @@ export class AppConfig {
 
   constructor(env: Env) {
     this.nodeEnv = env.NODE_ENV;
-    this.http = { port: env.PORT };
+    this.http = { port: env.PORT, corsOrigins: env.CORS_ORIGINS };
     this.dynamoDb = {
       region: env.AWS_REGION,
       localEndpoint: env.DYNAMODB_LOCAL_ENDPOINT,

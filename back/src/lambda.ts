@@ -4,7 +4,9 @@ import { NestFactory } from '@nestjs/core';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import type { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { AppModule } from './app.module';
+import { setupCors } from './common/http/setup-cors';
 import { setupOpenApi } from './common/openapi/setup-openapi';
+import { AppConfig } from './config/app-config';
 import { loadJwtSecretFromSsm } from './config/ssm-secrets';
 
 export type ApiGatewayHandler = (
@@ -20,6 +22,7 @@ export interface LambdaApp {
 export async function createLambdaApp(): Promise<LambdaApp> {
   await loadJwtSecretFromSsm({ env: process.env, client: new SSMClient({}) });
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  setupCors(app, app.get(AppConfig).http.corsOrigins);
   setupOpenApi(app);
   await app.init();
   const serve = serverlessExpress<APIGatewayProxyEvent, APIGatewayProxyResult>({

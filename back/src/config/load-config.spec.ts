@@ -44,6 +44,28 @@ describe('loadConfig', () => {
     });
   });
 
+  it('turns CORS off when CORS_ORIGINS is not set', () => {
+    expect(loadConfig(REQUIRED).http.corsOrigins).toEqual([]);
+  });
+
+  it('reads a comma-separated CORS_ORIGINS list', () => {
+    const config = loadConfig({
+      ...REQUIRED,
+      CORS_ORIGINS: ' http://localhost:5173 , https://app.example.com,',
+    });
+
+    expect(config.http.corsOrigins).toEqual(['http://localhost:5173', 'https://app.example.com']);
+  });
+
+  it.each([
+    'localhost:5173',
+    'http://localhost:5173/',
+    'https://app.example.com/path',
+    'ftp://x.io',
+  ])('rejects a CORS_ORIGINS entry of %p', (origin) => {
+    expect(() => loadConfig({ ...REQUIRED, CORS_ORIGINS: origin })).toThrow(InvalidConfigError);
+  });
+
   it('ignores variables that the schema does not define', () => {
     const config = loadConfig({ ...REQUIRED, HOME: '/home/user' });
 
