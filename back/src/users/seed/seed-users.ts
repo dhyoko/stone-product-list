@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto';
-import type { PasswordHasher } from './password-hasher';
-import { normalizeEmail, userIdSchema } from './user';
-import { UserAlreadyExistsError } from './user-already-exists.error';
-import type { UsersRepository } from './users.repository';
+import type { PasswordHasher } from '../application/password-hasher';
+import { normalizeEmail, userIdSchema } from '../domain/user';
+import { UserAlreadyExistsError } from '../domain/user-already-exists.error';
+import type { UsersRepository } from '../application/users.repository';
 
 export interface SeedUser {
   readonly email: string;

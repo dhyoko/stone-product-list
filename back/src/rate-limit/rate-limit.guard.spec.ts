@@ -2,7 +2,7 @@ import { Test } from '@nestjs/testing';
 import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host';
 import { ThrottlerModule } from '@nestjs/throttler';
 import type { AuthenticatedUser } from '../common/auth/authenticated-request';
-import { userIdSchema } from '../users/user';
+import { userIdSchema } from '../users/domain/user';
 import { RateLimitExceededError } from './rate-limit-exceeded.error';
 import { createRateLimitOptions } from './rate-limit-options';
 import { RateLimitGuard } from './rate-limit.guard';

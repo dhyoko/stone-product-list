@@ -1,4 +1,4 @@
-import { DomainError } from '../common/errors/domain-error';
+import { DomainError } from '../../common/errors/domain-error';
 
 export class UserAlreadyExistsError extends DomainError {
   readonly code = 'USER_ALREADY_EXISTS';

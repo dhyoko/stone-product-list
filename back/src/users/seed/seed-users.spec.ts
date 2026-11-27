@@ -1,7 +1,7 @@
 import { seedUsers } from './seed-users';
-import { FakePasswordHasher } from './testing/fake-password-hasher';
-import { InMemoryUsersRepository } from './testing/in-memory-users.repository';
-import { userIdSchema } from './user';
+import { FakePasswordHasher } from '../testing/fake-password-hasher';
+import { InMemoryUsersRepository } from '../testing/in-memory-users.repository';
+import { userIdSchema } from '../domain/user';
 
 describe('seedUsers', () => {
   const hasher = new FakePasswordHasher();

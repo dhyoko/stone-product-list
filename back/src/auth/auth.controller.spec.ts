@@ -3,7 +3,7 @@ import { plainToInstance } from 'class-transformer';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
-import { userIdSchema } from '../users/user';
+import { userIdSchema } from '../users/domain/user';
 import { InvalidCredentialsError } from './invalid-credentials.error';
 
 describe('AuthController', () => {

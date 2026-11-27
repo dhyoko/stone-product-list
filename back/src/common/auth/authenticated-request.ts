@@ -1,5 +1,5 @@
 import type { Request } from 'express';
-import type { UserId } from '../../users/user';
+import type { UserId } from '../../users/domain/user';
 
 export interface AuthenticatedUser {
   readonly id: UserId;

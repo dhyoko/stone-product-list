@@ -8,10 +8,10 @@ import {
 import { Test } from '@nestjs/testing';
 import { mockClient } from 'aws-sdk-client-mock';
 import { ZodError } from 'zod';
-import { AppConfig } from '../config/app-config';
-import { buildTestConfig } from '../config/testing/test-config';
-import { type StoredUser, userIdSchema } from './user';
-import { UserAlreadyExistsError } from './user-already-exists.error';
+import { AppConfig } from '../../config/app-config';
+import { buildTestConfig } from '../../config/testing/test-config';
+import { type StoredUser, userIdSchema } from '../domain/user';
+import { UserAlreadyExistsError } from '../domain/user-already-exists.error';
 import { DynamoUsersRepository } from './dynamo-users.repository';
 
 const user: StoredUser = {

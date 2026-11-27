@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { z } from 'zod';
 import { AppConfig } from '../config/app-config';
-import { type UserId, userIdSchema } from '../users/user';
+import { type UserId, userIdSchema } from '../users/domain/user';
 import { InvalidTokenError } from './invalid-token.error';
 
 const tokenPayloadSchema = z.object({ sub: userIdSchema });

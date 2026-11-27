@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import type { User, UserId } from '../users/user';
-import { UsersService } from '../users/users.service';
+import type { User, UserId } from '../users/domain/user';
+import { UsersService } from '../users/application/users.service';
 import { InvalidCredentialsError } from './invalid-credentials.error';
 import { InvalidTokenError } from './invalid-token.error';
 import { type AccessToken, TokenService } from './token.service';

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { Argon2PasswordHasher } from './argon2-password-hasher';
-import { DynamoUsersRepository } from './dynamo-users.repository';
-import { PasswordHasher } from './password-hasher';
-import { UsersRepository } from './users.repository';
-import { UsersService } from './users.service';
+import { Argon2PasswordHasher } from './infrastructure/argon2-password-hasher';
+import { DynamoUsersRepository } from './infrastructure/dynamo-users.repository';
+import { PasswordHasher } from './application/password-hasher';
+import { UsersRepository } from './application/users.repository';
+import { UsersService } from './application/users.service';
 
 @Module({
   providers: [

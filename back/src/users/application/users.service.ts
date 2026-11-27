@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PasswordHasher } from './password-hasher';
-import { normalizeEmail, type StoredUser, type User, type UserId } from './user';
+import { normalizeEmail, type StoredUser, type User, type UserId } from '../domain/user';
 import { UsersRepository } from './users.repository';
 
 const DUMMY_PASSWORD = 'dummy-password-for-unknown-emails';

@@ -7,11 +7,11 @@ import {
 } from '@aws-sdk/lib-dynamodb';
 import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
-import { AppConfig } from '../config/app-config';
-import { USERS_BY_ID_INDEX } from '../database/tables';
-import { type StoredUser, type UserId, userIdSchema } from './user';
-import { UserAlreadyExistsError } from './user-already-exists.error';
-import { UsersRepository } from './users.repository';
+import { AppConfig } from '../../config/app-config';
+import { USERS_BY_ID_INDEX } from '../../database/tables';
+import { type StoredUser, type UserId, userIdSchema } from '../domain/user';
+import { UserAlreadyExistsError } from '../domain/user-already-exists.error';
+import { UsersRepository } from '../application/users.repository';
 
 const userItemSchema = z.object({
   email: z.string(),

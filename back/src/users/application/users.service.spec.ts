@@ -1,8 +1,8 @@
 import { Test } from '@nestjs/testing';
 import { PasswordHasher } from './password-hasher';
-import { FakePasswordHasher } from './testing/fake-password-hasher';
-import { InMemoryUsersRepository } from './testing/in-memory-users.repository';
-import { type StoredUser, userIdSchema } from './user';
+import { FakePasswordHasher } from '../testing/fake-password-hasher';
+import { InMemoryUsersRepository } from '../testing/in-memory-users.repository';
+import { type StoredUser, userIdSchema } from '../domain/user';
 import { UsersRepository } from './users.repository';
 import { UsersService } from './users.service';
 

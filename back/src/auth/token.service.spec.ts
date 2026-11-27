@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { z } from 'zod';
 import { AppConfig } from '../config/app-config';
 import { buildTestConfig, TEST_JWT_SECRET } from '../config/testing/test-config';
-import { userIdSchema } from '../users/user';
+import { userIdSchema } from '../users/domain/user';
 import { InvalidTokenError } from './invalid-token.error';
 import { createJwtOptions } from './jwt-options';
 import { TokenService } from './token.service';

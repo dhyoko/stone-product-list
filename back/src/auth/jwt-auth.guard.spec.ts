@@ -7,7 +7,7 @@ import type { AuthenticatedRequest } from '../common/auth/authenticated-request'
 import { Public } from '../common/auth/public.decorator';
 import { AppConfig } from '../config/app-config';
 import { buildTestConfig } from '../config/testing/test-config';
-import { userIdSchema } from '../users/user';
+import { userIdSchema } from '../users/domain/user';
 import { InvalidTokenError } from './invalid-token.error';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { createJwtOptions } from './jwt-options';

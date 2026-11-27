@@ -9,9 +9,9 @@ import { AppConfig } from '../src/config/app-config';
 import { buildDemoProducts } from '../src/products/seed/demo-products';
 import { ProductsRepository } from '../src/products/application/products.repository';
 import { seedProducts } from '../src/products/seed/seed-products';
-import { Argon2PasswordHasher } from '../src/users/argon2-password-hasher';
-import { seedUsers } from '../src/users/seed-users';
-import { UsersRepository } from '../src/users/users.repository';
+import { Argon2PasswordHasher } from '../src/users/infrastructure/argon2-password-hasher';
+import { seedUsers } from '../src/users/seed/seed-users';
+import { UsersRepository } from '../src/users/application/users.repository';
 import { logIn } from './support/log-in';
 import { createTestTables, deleteTestTables } from './support/test-tables';
 
